@@ -38,13 +38,23 @@ export function FinanceSection() {
 
   const getFilteredOptions = useMemo(() => {
     const filterOptions = (type) => {
-      const options = type === "stocks" ? STOCK_OPTIONS : CRYPTO_OPTIONS;
+      // Add fallback empty array if options are undefined
+      const options =
+        type === "stocks" ? STOCK_OPTIONS || [] : CRYPTO_OPTIONS || [];
+
       const searchTerm = financeState[type]?.searchTerm?.toLowerCase() || "";
+
+      // If search term is empty, return all options
+      if (!searchTerm) {
+        return options;
+      }
 
       return options.filter(
         (option) =>
           option.symbol?.toLowerCase()?.includes(searchTerm) ||
-          option.name?.toLowerCase()?.includes(searchTerm)
+          option.name?.toLowerCase()?.includes(searchTerm) ||
+          option.label?.toLowerCase()?.includes(searchTerm) ||
+          option.key?.toLowerCase()?.includes(searchTerm)
       );
     };
 
@@ -59,6 +69,13 @@ export function FinanceSection() {
       dispatch(setFinancePreset({ category: type, preset: "custom" }));
       const modal = document.getElementById(`my_modal_${type}`);
       if (modal) modal.showModal();
+    },
+    [dispatch]
+  );
+
+  const handleSearchChange = useCallback(
+    (type, value) => {
+      dispatch(setFinanceSearch({ category: type, term: value }));
     },
     [dispatch]
   );
@@ -150,7 +167,8 @@ export function FinanceSection() {
 
   const renderModal = useCallback(
     (type) => {
-      const options = type === "stocks" ? STOCK_OPTIONS : CRYPTO_OPTIONS;
+      const options =
+        type === "stocks" ? STOCK_OPTIONS || [] : CRYPTO_OPTIONS || [];
       const filtered = getFilteredOptions[type];
       const title = type === "stocks" ? "Stock" : "Crypto";
       const placeholder =
@@ -171,77 +189,135 @@ export function FinanceSection() {
                 ✕
               </button>
             </form>
-            <h3 className="font-bold text-lg mb-4">{title} Selection</h3>
+            <h3 className="font-bold text-lg">Custom {title} Selection</h3>
 
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-sm text-base-content/70">
-                {selectedCount} selected
-              </span>
-              <div className="flex gap-2">
-                <button
-                  className="btn btn-sm btn-outline"
-                  onClick={() =>
-                    dispatch(toggleAllFinanceSelections({ category: type }))
-                  }
-                >
-                  Toggle All
-                </button>
-                <button
-                  className="btn btn-sm btn-outline"
-                  onClick={() =>
-                    dispatch(resetFinanceSelections({ category: type }))
-                  }
-                >
-                  Reset
-                </button>
-              </div>
+            <div className="form-control w-full my-4">
+              <input
+                type="text"
+                placeholder={placeholder}
+                className="input input-bordered w-full"
+                value={settings.searchTerm || ""} // Changed from defaultValue to value
+                onChange={(e) => handleSearchChange(type, e.target.value)}
+              />
             </div>
 
-            <input
-              type="text"
-              placeholder={placeholder}
-              className="input input-bordered w-full mb-4"
-              value={settings.searchTerm}
-              onChange={(e) =>
-                dispatch(
-                  setFinanceSearch({
-                    category: type,
-                    searchTerm: e.target.value,
-                  })
-                )
-              }
-            />
-
-            <div className="grid grid-cols-1 gap-2 max-h-80 overflow-y-auto">
-              {filtered.map((option) => (
-                <label
-                  key={option.symbol}
-                  className="label cursor-pointer justify-start gap-3"
+            <div className="flex gap-2 mb-4">
+              <button
+                className="btn btn-sm btn-outline"
+                onClick={() =>
+                  dispatch(
+                    toggleAllFinanceSelections({
+                      category: type,
+                      selectAll: true,
+                    })
+                  )
+                }
+              >
+                Select All
+              </button>
+              <button
+                className="btn btn-sm btn-outline"
+                onClick={() =>
+                  dispatch(
+                    toggleAllFinanceSelections({
+                      category: type,
+                      selectAll: false,
+                    })
+                  )
+                }
+              >
+                Deselect All
+              </button>
+              <button
+                className="btn btn-sm btn-ghost"
+                onClick={() =>
+                  dispatch(resetFinanceSelections({ category: type }))
+                }
+              >
+                Reset to Default
+              </button>
+              {settings.searchTerm && (
+                <button
+                  className="btn btn-sm btn-ghost"
+                  onClick={() =>
+                    dispatch(setFinanceSearch({ category: type, term: "" }))
+                  }
                 >
-                  <input
-                    type="checkbox"
-                    className="checkbox checkbox-sm"
-                    checked={!!settings.customSelections[option.symbol]}
-                    onChange={() =>
-                      dispatch(
-                        toggleFinanceSelection({
-                          category: type,
-                          symbol: option.symbol,
-                        })
-                      )
-                    }
-                  />
-                  <span className="label-text">
-                    {option.symbol} - {option.name}
-                  </span>
-                </label>
-              ))}
+                  Clear Search
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2 max-h-64 overflow-y-auto">
+              {options.length === 0 ? (
+                <div className="text-center text-base-content/50 py-4">
+                  <p>No {type} data available.</p>
+                  <p className="text-sm mt-2">
+                    Please check your data file imports.
+                  </p>
+                </div>
+              ) : filtered.length === 0 ? (
+                <div className="text-center text-base-content/50 py-4">
+                  No {type} found matching your search
+                </div>
+              ) : (
+                filtered.map((option) => (
+                  <label
+                    key={option.key}
+                    className={`${
+                      settings.customSelections[option.key]
+                        ? "bg-base-200"
+                        : "bg-base-200/50"
+                    } label cursor-pointer justify-start gap-3 btn btn-ghost text-left`}
+                  >
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-sm"
+                      checked={settings.customSelections[option.key] || false}
+                      onChange={() =>
+                        dispatch(
+                          toggleFinanceSelection({
+                            category: type,
+                            key: option.key,
+                          })
+                        )
+                      }
+                    />
+                    <div className="flex flex-col items-start">
+                      <span className="label-text font-semibold">
+                        {option.key || option.symbol}
+                      </span>
+                      <span className="label-text text-sm text-base-content/70">
+                        {option.label || option.name}
+                      </span>
+                    </div>
+                  </label>
+                ))
+              )}
+            </div>
+
+            <div className="text-sm text-base-content/70 mt-4 flex justify-between">
+              <span>
+                {selectedCount} of {options.length} {type} selected
+              </span>
+              {settings.searchTerm && (
+                <span>Showing {filtered.length} results</span>
+              )}
             </div>
           </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </dialog>
       );
     },
-    [financeState, getFilteredOptions, getSelected, dispatch]
+    [
+      financeState,
+      getFilteredOptions,
+      getSelected,
+      handleSearchChange,
+      dispatch,
+    ]
   );
 
   return (
@@ -252,8 +328,8 @@ export function FinanceSection() {
             <legend className="fieldset-legend mx-auto text-lg py-0">
               <div className="tooltip tooltip-bottom card card-border border-base-300 flex-row items-center justify-center gap-1 px-4 py-1 group-hover:bg-base-200 transition-all duration-150">
                 <div className="tooltip-content w-60 px-4 py-3">
-                  Select your preferred trades to display on Scrollr. You can also
-                  add custom selections.
+                  Select your preferred trades to display on Scrollr. You can
+                  also add custom selections.
                 </div>
                 <InformationCircleIcon className="size-5 text-base-content/30 group-hover:text-base-content/70 transition-all duration-150" />
                 Finance
