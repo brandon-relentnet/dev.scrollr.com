@@ -1,21 +1,35 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// @ts-ignore
-// Mock browser for website (no extension APIs needed)
+import { 
+  setCredentials, 
+  updateUser, 
+  logout as logoutAction, 
+  setLoading, 
+  setError, 
+  setSyncStatus,
+  updateSettings as updateUserSettings,
+  selectAuth,
+  selectIsAuthenticated,
+  selectUser,
+  selectToken,
+  selectAuthLoading,
+  selectAuthError,
+  selectSyncStatus
+} from "@/slices/authSlice";
 import { API_ENDPOINTS } from "@/config/endpoints.js";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";
 
 export function useAuth() {
-  const [authState, setAuthState] = useState({
-    user: null,
-    token: null,
-    isLoading: true,
-    isAuthenticated: false,
-  });
-
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [isLoadingSettings, setIsLoadingSettings] = useState(false);
   const dispatch = useDispatch();
+  
+  // Get auth state from Redux
+  const authState = useSelector(selectAuth);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
+  const token = useSelector(selectToken);
+  const isLoading = useSelector(selectAuthLoading);
+  const error = useSelector(selectAuthError);
+  const syncStatus = useSelector(selectSyncStatus);
 
   // Get settings with a stable reference to prevent infinite loops
   const theme = useSelector((state) => state.theme);
@@ -42,6 +56,8 @@ export function useAuth() {
   // Create a stable reference to prevent unnecessary effect triggers
   const settingsRef = useRef(currentSettings);
   const [lastSavedSettings, setLastSavedSettings] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoadingSettings, setIsLoadingSettings] = useState(false);
 
   // Save current settings to server
   const saveSettingsToServer = useCallback(
@@ -127,16 +143,14 @@ export function useAuth() {
     [dispatch, saveSettingsToServer]
   );
 
-  // Initialize auth state from storage
+  // Initialize auth state from Redux persisted storage
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const token = localStorage.getItem("auth_token");
-        const userData = localStorage.getItem("auth_user");
-
-        if (token && userData) {
-          const user = JSON.parse(userData);
-
+        dispatch(setLoading(true));
+        
+        // Redux persist has already loaded the token and user from storage
+        if (token && user) {
           // Verify token is still valid by fetching current user
           const response = await fetch(API_ENDPOINTS.accounts.auth.me, {
             headers: {
@@ -147,31 +161,14 @@ export function useAuth() {
 
           if (response.ok) {
             const { user: currentUser } = await response.json();
-            setAuthState({
-              user: currentUser,
-              token,
-              isLoading: false,
-              isAuthenticated: true,
-            });
+            dispatch(setCredentials({ token, user: currentUser }));
 
             // Load user settings from server
             await loadSettingsFromServer(token);
           } else {
-            // Token is invalid, clear storage
-            localStorage.removeItem("auth_token");
-            localStorage.removeItem("auth_user");
-            setAuthState({
-              user: null,
-              token: null,
-              isLoading: false,
-              isAuthenticated: false,
-            });
+            // Token is invalid, clear auth state
+            dispatch(logoutAction());
           }
-        } else {
-          setAuthState((prev) => ({
-            ...prev,
-            isLoading: false,
-          }));
         }
       } catch (error) {
         debugLogger.error(
@@ -179,13 +176,10 @@ export function useAuth() {
           "Auth initialization error",
           error
         );
-        setAuthState({
-          user: null,
-          token: null,
-          isLoading: false,
-          isAuthenticated: false,
-        });
+        dispatch(logoutAction());
+        dispatch(setError("Failed to initialize authentication"));
       } finally {
+        dispatch(setLoading(false));
         setIsInitialized(true);
       }
     };
@@ -193,7 +187,7 @@ export function useAuth() {
     if (!isInitialized) {
       initializeAuth();
     }
-  }, [isInitialized]);
+  }, [isInitialized, token, user, dispatch, loadSettingsFromServer]);
 
   // Update settings ref when settings change
   useEffect(() => {
@@ -205,8 +199,8 @@ export function useAuth() {
     if (
       !isInitialized ||
       isLoadingSettings ||
-      !authState.isAuthenticated ||
-      !authState.token
+      !isAuthenticated ||
+      !token
     ) {
       return;
     }
@@ -221,7 +215,7 @@ export function useAuth() {
 
     try {
       debugLogger.authEvent("Immediately saving settings to server");
-      await saveSettingsToServer(authState.token);
+      await saveSettingsToServer(token);
       setLastSavedSettings(settingsRef.current);
     } catch (error) {
       debugLogger.error(DEBUG_CATEGORIES.AUTH, "Immediate save failed", error);
@@ -230,8 +224,8 @@ export function useAuth() {
     currentSettings,
     isInitialized,
     isLoadingSettings,
-    authState.isAuthenticated,
-    authState.token,
+    isAuthenticated,
+    token,
     saveSettingsToServer,
     lastSavedSettings,
   ]);
@@ -242,8 +236,8 @@ export function useAuth() {
     if (
       !isInitialized ||
       isLoadingSettings ||
-      !authState.isAuthenticated ||
-      !authState.token
+      !isAuthenticated ||
+      !token
     ) {
       return;
     }
@@ -260,7 +254,7 @@ export function useAuth() {
     const timeoutId = setTimeout(async () => {
       try {
         debugLogger.authEvent("Auto-saving settings to server");
-        await saveSettingsToServer(authState.token);
+        await saveSettingsToServer(token);
         setLastSavedSettings(settingsRef.current);
       } catch (error) {
         debugLogger.error(DEBUG_CATEGORIES.AUTH, "Auto-save failed", error);
@@ -272,8 +266,8 @@ export function useAuth() {
     currentSettings,
     isInitialized,
     isLoadingSettings,
-    authState.isAuthenticated,
-    authState.token,
+    isAuthenticated,
+    token,
     saveSettingsToServer,
     lastSavedSettings,
   ]);
@@ -284,8 +278,8 @@ export function useAuth() {
       if (
         isInitialized &&
         !isLoadingSettings &&
-        authState.isAuthenticated &&
-        authState.token &&
+        isAuthenticated &&
+        token &&
         lastSavedSettings &&
         JSON.stringify(currentSettings) !== JSON.stringify(lastSavedSettings)
       ) {
@@ -294,7 +288,7 @@ export function useAuth() {
           fetch(API_ENDPOINTS.accounts.auth.settings, {
             method: "POST",
             headers: {
-              Authorization: `Bearer ${authState.token}`,
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -335,8 +329,8 @@ export function useAuth() {
     currentSettings,
     isInitialized,
     isLoadingSettings,
-    authState.isAuthenticated,
-    authState.token,
+    isAuthenticated,
+    token,
     lastSavedSettings,
   ]);
 
@@ -344,6 +338,9 @@ export function useAuth() {
     async (credentials) => {
       const maxRetries = 3;
       let lastError = null;
+      
+      dispatch(setLoading(true));
+      dispatch(setError(null));
 
       for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
@@ -374,6 +371,7 @@ export function useAuth() {
               ); // exponential backoff
               continue;
             }
+            dispatch(setError(`Server temporarily unavailable (${response.status}). Please try again.`));
             return {
               success: false,
               error: `Server temporarily unavailable (${response.status}). Please try again.`,
@@ -404,6 +402,7 @@ export function useAuth() {
               );
               continue;
             }
+            dispatch(setError("Server returned invalid response. Please try again."));
             return {
               success: false,
               error: "Server returned invalid response. Please try again.",
@@ -413,23 +412,18 @@ export function useAuth() {
           if (response.ok) {
             const { token, user } = data;
 
-            // Store auth data
-            localStorage.setItem("auth_token", token);
-            localStorage.setItem("auth_user", JSON.stringify(user));
-
-            setAuthState({
-              user,
-              token,
-              isLoading: false,
-              isAuthenticated: true,
-            });
+            // Update Redux store with auth data
+            dispatch(setCredentials({ token, user }));
+            dispatch(setLoading(false));
 
             // Load user settings from server after successful login
             await loadSettingsFromServer(token);
 
             return { success: true };
           } else {
-            return { success: false, error: data.error || "Login failed" };
+            const errorMessage = data.error || "Login failed";
+            dispatch(setError(errorMessage));
+            return { success: false, error: errorMessage };
           }
         } catch (error) {
           debugLogger.error(
@@ -450,18 +444,22 @@ export function useAuth() {
         }
       }
 
+      const errorMessage = "Network error during login. Please check your connection and try again.";
+      dispatch(setError(errorMessage));
       return {
         success: false,
-        error:
-          "Network error during login. Please check your connection and try again.",
+        error: errorMessage,
       };
     },
-    [loadSettingsFromServer]
+    [dispatch, loadSettingsFromServer]
   );
 
   const register = useCallback(
     async (credentials) => {
       try {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+        
         const response = await fetch(API_ENDPOINTS.accounts.auth.register, {
           method: "POST",
           headers: {
@@ -475,47 +473,50 @@ export function useAuth() {
         if (response.ok) {
           const { token, user } = data;
 
-          // Store auth data
-          localStorage.setItem("auth_token", token);
-          localStorage.setItem("auth_user", JSON.stringify(user));
-
-          setAuthState({
-            user,
-            token,
-            isLoading: false,
-            isAuthenticated: true,
-          });
+          // Update Redux store with auth data
+          dispatch(setCredentials({ token, user }));
+          dispatch(setLoading(false));
 
           // For new registrations, save current local settings to server
           await saveSettingsToServer(token);
 
           return { success: true };
         } else {
-          return { success: false, error: data.error || "Registration failed" };
+          const errorMessage = data.error || "Registration failed";
+          dispatch(setError(errorMessage));
+          return { success: false, error: errorMessage };
         }
       } catch (error) {
         debugLogger.error(DEBUG_CATEGORIES.AUTH, "Registration error", error);
-        return { success: false, error: "Network error during registration" };
+        const errorMessage = "Network error during registration";
+        dispatch(setError(errorMessage));
+        return { success: false, error: errorMessage };
       }
     },
-    [saveSettingsToServer]
+    [dispatch, saveSettingsToServer]
   );
 
   const logout = useCallback(async () => {
     // Save current settings to server before logging out
-    if (authState.token) {
-      await saveSettingsToServer(authState.token);
+    if (token) {
+      await saveSettingsToServer(token);
     }
 
-    // Clear authentication data
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("auth_user");
+    // Dispatch logout action to Redux
+    dispatch(logoutAction());
 
     // Clear extension storage
     try {
       // Clear localStorage in web environment
       if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.clear();
+        // Only clear non-Redux persist keys
+        const keysToKeep = ['persist:myscrollr_state'];
+        const allKeys = Object.keys(window.localStorage);
+        allKeys.forEach(key => {
+          if (!keysToKeep.includes(key)) {
+            window.localStorage.removeItem(key);
+          }
+        });
       }
     } catch (error) {
       debugLogger.error(
@@ -524,14 +525,6 @@ export function useAuth() {
         error
       );
     }
-
-    // Update auth state
-    setAuthState({
-      user: null,
-      token: null,
-      isLoading: false,
-      isAuthenticated: false,
-    });
 
     // Refresh the entire extension to reset all state
     setTimeout(() => {
@@ -542,7 +535,7 @@ export function useAuth() {
       // Force refresh of current context (popup)
       window.location.reload();
     }, 100);
-  }, [authState.token, saveSettingsToServer]);
+  }, [token, dispatch, saveSettingsToServer]);
 
   const updateProfile = useCallback(
     async (profileData) => {
@@ -550,7 +543,7 @@ export function useAuth() {
         const response = await fetch(API_ENDPOINTS.accounts.auth.profile, {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${authState.token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(profileData),
@@ -561,13 +554,8 @@ export function useAuth() {
         if (response.ok) {
           const { user } = data;
 
-          // Update stored user data
-          localStorage.setItem("auth_user", JSON.stringify(user));
-
-          setAuthState((prev) => ({
-            ...prev,
-            user,
-          }));
+          // Update user data in Redux store
+          dispatch(updateUser(user));
 
           return { success: true };
         } else {
@@ -581,7 +569,7 @@ export function useAuth() {
         return { success: false, error: "Network error during profile update" };
       }
     },
-    [authState.token]
+    [token, dispatch]
   );
 
   const changePassword = useCallback(
@@ -592,7 +580,7 @@ export function useAuth() {
           {
             method: "PUT",
             headers: {
-              Authorization: `Bearer ${authState.token}`,
+              Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify({ currentPassword, newPassword }),
@@ -621,18 +609,30 @@ export function useAuth() {
         };
       }
     },
-    [authState.token]
+    [token]
   );
 
   // Manual settings sync function for UI use
   const syncSettings = useCallback(async () => {
-    if (authState.isAuthenticated && authState.token) {
-      await saveSettingsToServer(authState.token);
+    if (isAuthenticated && token) {
+      dispatch(setSyncStatus({ status: 'syncing' }));
+      try {
+        await saveSettingsToServer(token);
+        dispatch(setSyncStatus({ status: 'synced' }));
+      } catch (error) {
+        dispatch(setSyncStatus({ status: 'error' }));
+        throw error;
+      }
     }
-  }, [authState.isAuthenticated, authState.token, saveSettingsToServer]);
+  }, [isAuthenticated, token, dispatch, saveSettingsToServer]);
 
   return {
-    ...authState,
+    user,
+    token,
+    isAuthenticated,
+    isLoading,
+    error,
+    syncStatus,
     login,
     register,
     logout,

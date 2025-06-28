@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setRssEnabled,
@@ -16,6 +16,11 @@ export function RssSection() {
   const rssState = useSelector((state) => state.rss);
   const { isAuthenticated } = useAuth();
   const { feeds, addFeed, deleteFeed, isLoading, error } = useRssFeeds();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const [rssFormData, setRssFormData] = useState({
     name: "",
@@ -54,7 +59,8 @@ export function RssSection() {
 
   return (
     <>
-      <fieldset className="fieldset group bg-base-100 border-base-300 space-y-2 rounded-box w-full border p-4">
+      {isMounted && (
+        <fieldset className="fieldset group bg-base-100 border-base-300 space-y-2 rounded-box w-full border p-4">
         <legend className="fieldset-legend mx-auto text-lg py-0">
           <div className="tooltip tooltip-bottom card card-border border-base-300 flex-row items-center justify-center gap-1 px-4 py-1 group-hover:bg-base-200 transition-all duration-150">
             <div className="tooltip-content w-60 px-4 py-3">
@@ -193,9 +199,11 @@ export function RssSection() {
           </>
         )}
       </fieldset>
+      )}
 
       {/* RSS Selection Modal */}
-      <dialog id="rss_modal" className="modal">
+      {isMounted && (
+        <dialog id="rss_modal" className="modal">
         <div className="modal-box max-w-2xl">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -298,6 +306,7 @@ export function RssSection() {
           <button>close</button>
         </form>
       </dialog>
+      )}
     </>
   );
 }

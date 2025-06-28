@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   STOCK_PRESETS,
@@ -19,6 +19,11 @@ import {
 export function FinanceSection() {
   const dispatch = useDispatch();
   const financeState = useSelector((state) => state.finance);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const getSelected = useCallback(
     (type) => {
@@ -241,26 +246,30 @@ export function FinanceSection() {
 
   return (
     <>
-      <fieldset className="fieldset group bg-base-100 border-base-300 rounded-box w-full border p-4">
-        <legend className="fieldset-legend mx-auto text-lg py-0">
-          <div className="tooltip tooltip-bottom card card-border border-base-300 flex-row items-center justify-center gap-1 px-4 py-1 group-hover:bg-base-200 transition-all duration-150">
-            <div className="tooltip-content w-60 px-4 py-3">
-              Select your preferred trades to display on Scrollr. You can also
-              add custom selections.
+      {isMounted && (
+        <>
+          <fieldset className="fieldset group bg-base-100 border-base-300 rounded-box w-full border p-4">
+            <legend className="fieldset-legend mx-auto text-lg py-0">
+              <div className="tooltip tooltip-bottom card card-border border-base-300 flex-row items-center justify-center gap-1 px-4 py-1 group-hover:bg-base-200 transition-all duration-150">
+                <div className="tooltip-content w-60 px-4 py-3">
+                  Select your preferred trades to display on Scrollr. You can also
+                  add custom selections.
+                </div>
+                <InformationCircleIcon className="size-5 text-base-content/30 group-hover:text-base-content/70 transition-all duration-150" />
+                Finance
+              </div>
+            </legend>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              {renderPresetOptions("stocks")}
+              {renderPresetOptions("crypto")}
             </div>
-            <InformationCircleIcon className="size-5 text-base-content/30 group-hover:text-base-content/70 transition-all duration-150" />
-            Finance
-          </div>
-        </legend>
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          {renderPresetOptions("stocks")}
-          {renderPresetOptions("crypto")}
-        </div>
-      </fieldset>
+          </fieldset>
 
-      {/* Modals */}
-      {renderModal("stocks")}
-      {renderModal("crypto")}
+          {/* Modals */}
+          {renderModal("stocks")}
+          {renderModal("crypto")}
+        </>
+      )}
     </>
   );
 }

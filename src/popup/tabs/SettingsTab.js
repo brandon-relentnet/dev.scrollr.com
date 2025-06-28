@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setDebugMode, toggleDebugCategory } from "../../store/togglesSlice.js";
 import debugLogger, { DEBUG_CATEGORIES } from "../../utils/debugLogger.js";
+import { persistor } from "../../store.js";
 
 export default function SettingsTab() {
   const [isExporting, setIsExporting] = useState(false);
@@ -132,26 +133,70 @@ export default function SettingsTab() {
     try {
       setIsClearing(true);
 
-      // Clear extension storage
-      // Clear localStorage in web environment
-      if (typeof window !== "undefined" && window.localStorage) {
-        window.localStorage.clear();
+      // Define initial states for each slice
+      const initialStates = {
+        theme: { mode: "scrollr" },
+        layout: {
+          mode: 'compact',
+          speed: 'classic',
+          position: 'bottom',
+          opacity: 1.0
+        },
+        finance: {
+          stocks: {
+            enabled: false,
+            activePreset: null,
+            customSelections: {},
+            searchTerm: ""
+          },
+          crypto: {
+            enabled: false,
+            activePreset: null,
+            customSelections: {},
+            searchTerm: ""
+          }
+        },
+        power: { mode: true },
+        toggles: {
+          debugMode: false,
+          debugCategories: []
+        },
+        rss: {
+          feeds: [],
+          enabled: false
+        },
+        pinned: {
+          items: []
+        },
+        auth: {
+          isAuthenticated: false,
+          user: null
+        },
+        debug: {}
+      };
+
+      // Reset each slice state using Redux actions
+      Object.keys(initialStates).forEach((sliceKey) => {
+        const actionType = `${sliceKey}/setState`;
+        dispatch({ type: actionType, payload: initialStates[sliceKey] });
+      });
+
+      // Clear redux-persist storage
+      await persistor.purge();
+
+      // Clear sessionStorage for any non-persisted data
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        window.sessionStorage.clear();
       }
-
-      // Clear localStorage
-      localStorage.clear();
-
-      // Clear sessionStorage
-      sessionStorage.clear();
-
-      // Update storage size display
-      setStorageSize(calculateStorageSize());
 
       // Clear any cached data
       if ("caches" in window) {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map((name) => caches.delete(name)));
       }
+
+      // Update storage size display
+      setStorageSize(calculateStorageSize());
 
       showStatus("All data cleared successfully!");
 
@@ -171,13 +216,34 @@ export default function SettingsTab() {
   const calculateStorageSize = () => {
     try {
       if (typeof window === 'undefined') return "Unknown";
-      let total = 0;
-      for (const key in localStorage) {
-        if (localStorage.hasOwnProperty(key)) {
-          total += localStorage.getItem(key)?.length || 0;
+      
+      // Calculate size of Redux store state
+      const storeState = {
+        theme,
+        layout,
+        finance,
+        power,
+        toggles,
+        rss
+      };
+      
+      const stateString = JSON.stringify(storeState);
+      const stateSize = stateString.length;
+      
+      // Also check localStorage for any remaining data (like the redux-persist key)
+      let localStorageSize = 0;
+      try {
+        for (const key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            localStorageSize += localStorage.getItem(key)?.length || 0;
+          }
         }
+      } catch {
+        // localStorage might not be available
       }
-      return `${(total / 1024).toFixed(1)} KB`;
+      
+      const totalSize = stateSize + localStorageSize;
+      return `${(totalSize / 1024).toFixed(1)} KB`;
     } catch {
       return "Unknown";
     }
@@ -185,7 +251,7 @@ export default function SettingsTab() {
 
   useEffect(() => {
     setStorageSize(calculateStorageSize());
-  }, []);
+  }, [theme, layout, finance, power, toggles, rss]);
 
   return (
     <>

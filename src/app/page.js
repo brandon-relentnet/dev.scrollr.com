@@ -1,19 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Provider, useSelector } from "react-redux";
-import store from "../store";
+import { PersistGate } from 'redux-persist/integration/react';
+import store, { persistor } from "../store";
 import PopupApp from "../popup/App";
 import IframeApp from "../iframe/App";
+import ClientOnly from "../components/ClientOnly";
 
 function MyScrollrContent() {
   const [showPopup, setShowPopup] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Get state from Redux
   const layout = useSelector((state) => state.layout?.mode || "compact");
   const position = useSelector((state) => state.layout?.position || "bottom");
-  const opacity = useSelector((state) => state.layout?.opacity || 1.0);
+  const opacity = useSelector((state) => state.layout?.opacity ?? 1.0);
   const power = useSelector((state) => state.power?.mode !== false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
 
   // Height configurations based on layout mode
   const heightConfig = {
@@ -68,36 +76,42 @@ function MyScrollrContent() {
       </div>
 
       {/* Carousel iframe - responsive to settings */}
-      <div
-        className={`
-          fixed left-0 right-0 z-30 transition-all duration-300 ease-out
-          ${position === "top" ? "top-0" : "bottom-0"}
-          ${heightConfig[layout]}
-          ${power ? "pointer-events-auto" : "opacity-0 pointer-events-none"}
-          ${
-            power
-              ? position === "top"
-                ? "translate-y-0"
-                : "translate-y-0"
-              : position === "top"
-              ? "-translate-y-full"
-              : "translate-y-full"
-          }
-        `}
-        style={{
-          opacity: power ? opacity : 0,
-        }}
-      >
-        <IframeApp />
-      </div>
+      {isMounted && (
+        <div
+          className={`
+            fixed left-0 right-0 z-30 transition-all duration-300 ease-out
+            ${position === "top" ? "top-0" : "bottom-0"}
+            ${heightConfig[layout]}
+            ${power ? "pointer-events-auto" : "pointer-events-none"}
+            ${
+              power
+                ? position === "top"
+                  ? "translate-y-0"
+                  : "translate-y-0"
+                : position === "top"
+                ? "-translate-y-full"
+                : "translate-y-full"
+            }
+          `}
+          style={{
+            opacity: power ? opacity : 0,
+          }}
+        >
+          <IframeApp />
+        </div>
+      )}
     </div>
   );
 }
 
 export default function Home() {
   return (
-    <Provider store={store}>
-      <MyScrollrContent />
-    </Provider>
+    <ClientOnly>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <MyScrollrContent />
+        </PersistGate>
+      </Provider>
+    </ClientOnly>
   );
 }

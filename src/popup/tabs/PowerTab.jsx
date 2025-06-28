@@ -1,5 +1,6 @@
 import { BoltIcon, BoltSlashIcon, PowerIcon } from "@heroicons/react/24/solid";
 import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
 import { setLayout, toggleSpeed, togglePosition } from "@/store/layoutSlice";
 import { togglePower } from "@/store/powerSlice";
 import AnimatedSpeedToggle from "@/components/controls/AnimatedSpeedToggle";
@@ -8,11 +9,16 @@ import LayoutToggle from "@/components/controls/LayoutToggle";
 
 export default function PowerTab() {
   const dispatch = useDispatch();
+  const [isMounted, setIsMounted] = useState(false);
 
   const layout = useSelector((state) => state.layout?.mode || "compact");
   const speed = useSelector((state) => state.layout?.speed || "classic");
   const position = useSelector((state) => state.layout?.position || "top");
   const power = useSelector((state) => state.power?.mode !== false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handleLayoutChange = () => {
     const newLayout = layout === "compact" ? "comfort" : "compact";
@@ -59,39 +65,43 @@ export default function PowerTab() {
                 : "text-primary"
             }`}
           >
-            <input
-              type="checkbox"
-              onChange={handlePowerToggle}
-              checked={!power}
-            />
+            {isMounted && (
+              <input
+                type="checkbox"
+                onChange={handlePowerToggle}
+                checked={!power}
+              />
+            )}
             <BoltSlashIcon className="swap-on size-full transition-colors duration-150" />
             <BoltIcon className="swap-off size-full transition-colors duration-150" />
           </label>
-          <ul className="flex items-center justify-center shadow-sm hover:shadow-md transition duration-150 gap-6 px-5 p-3 bg-base-200 rounded-box mt-6">
-            <li>
-              <PositionToggle
-                position={position}
-                layout={layout}
-                onChange={handlePositionToggle}
-                showLabel={false}
+          {isMounted && (
+            <ul className="flex items-center justify-center shadow-sm hover:shadow-md transition duration-150 gap-6 px-5 p-3 bg-base-200 rounded-box mt-6">
+              <li>
+                <PositionToggle
+                  position={position}
+                  layout={layout}
+                  onChange={handlePositionToggle}
+                  showLabel={false}
+                  className="tooltip"
+                />
+              </li>
+              <AnimatedSpeedToggle
+                speed={speed}
+                onSpeedToggle={handleSpeedToggle}
                 className="tooltip"
               />
-            </li>
-            <AnimatedSpeedToggle
-              speed={speed}
-              onSpeedToggle={handleSpeedToggle}
-              className="tooltip"
-            />
-            <li>
-              <LayoutToggle
-                layout={layout}
-                position={position}
-                onChange={() => handleLayoutChange()}
-                showLabel={false}
-                className="tooltip"
-              />
-            </li>
-          </ul>
+              <li>
+                <LayoutToggle
+                  layout={layout}
+                  position={position}
+                  onChange={() => handleLayoutChange()}
+                  showLabel={false}
+                  className="tooltip"
+                />
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </>

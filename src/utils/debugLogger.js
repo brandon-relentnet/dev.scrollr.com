@@ -3,7 +3,11 @@
  *
  * Provides structured logging with configurable debug modes.
  * Only critical errors are shown in production unless debug mode is enabled.
+ * Now uses Redux store for state management.
  */
+
+import store from '../store';
+import { setDebugEnabled, setDebugCategories } from '../slices/debugSlice';
 
 // Debug categories for granular control
 export const DEBUG_CATEGORIES = {
@@ -27,60 +31,55 @@ export const LOG_LEVELS = {
 
 class DebugLogger {
   constructor() {
-    this.isDebugMode = false;
-    this.debugCategories = new Set();
     this.sessionId = this.generateSessionId();
-    this.initializeFromStorage();
+    this.initializeFromStore();
   }
 
   generateSessionId() {
     return Math.random().toString(36).substr(2, 9);
   }
 
-  async initializeFromStorage() {
+  initializeFromStore() {
     try {
-      // Try to load debug settings from extension storage
-      // Use localStorage for web environment
-      if (typeof window !== 'undefined') {
-        const debugMode = localStorage.getItem('debugMode');
-        const debugCategories = localStorage.getItem('debugCategories');
-        this.isDebugMode = debugMode ? JSON.parse(debugMode) : false;
-        this.debugCategories = new Set(debugCategories ? JSON.parse(debugCategories) : []);
+      const state = store.getState();
+      const isDebugMode = state.debug?.enabled || false;
+      const debugCategories = state.debug?.categories || [];
 
-        if (this.isDebugMode) {
-          this.info("DEBUG", "🐛 Debug mode initialized", {
-            sessionId: this.sessionId,
-            categories: Array.from(this.debugCategories),
-          });
-        }
+      if (isDebugMode) {
+        this.info("DEBUG", "🐛 Debug mode initialized from Redux", {
+          sessionId: this.sessionId,
+          categories: debugCategories,
+        });
       }
     } catch (error) {
-      // Fallback for environments without browser.storage
-      this.isDebugMode = false;
-      this.debugCategories = new Set();
+      console.error("Failed to initialize debug logger from store:", error);
     }
   }
 
-  async setDebugMode(enabled, categories = []) {
-    this.isDebugMode = enabled;
-    this.debugCategories = new Set(categories);
+  get isDebugMode() {
+    const state = store.getState();
+    return state.debug?.enabled || false;
+  }
 
+  get debugCategories() {
+    const state = store.getState();
+    return new Set(state.debug?.categories || []);
+  }
+
+  async setDebugMode(enabled, categories = []) {
     try {
-      // Use localStorage for web environment
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('debugMode', JSON.stringify(enabled));
-        localStorage.setItem('debugCategories', JSON.stringify(categories));
+      store.dispatch(setDebugEnabled(enabled));
+      store.dispatch(setDebugCategories(categories));
+
+      if (enabled) {
+        this.info("DEBUG", "🐛 Debug mode enabled", {
+          categories: categories,
+        });
+      } else {
+        console.log("🐛 Debug mode disabled");
       }
     } catch (error) {
       console.error("Failed to save debug settings:", error);
-    }
-
-    if (enabled) {
-      this.info("DEBUG", "🐛 Debug mode enabled", {
-        categories: Array.from(this.debugCategories),
-      });
-    } else {
-      console.log("🐛 Debug mode disabled");
     }
   }
 
@@ -96,8 +95,9 @@ class DebugLogger {
     }
 
     // If specific categories are set, only log those categories
-    if (this.debugCategories.size > 0) {
-      return this.debugCategories.has(category);
+    const categories = this.debugCategories;
+    if (categories.size > 0) {
+      return categories.has(category);
     }
 
     // If debug mode is on but no specific categories, log everything

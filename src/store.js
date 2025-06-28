@@ -1,59 +1,44 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loadState, { saveState } from "./extensionStorage.js";
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 import rootReducer from "@/store/rootReducer.js";
-import debugLogger, { DEBUG_CATEGORIES } from "./utils/debugLogger.js";
+import authReducer from "./slices/authSlice";
+import debugReducer from "./slices/debugSlice";
 
-// Create store with all reducers
-const store = configureStore({
-  reducer: rootReducer,
-  // No preloadedState - we'll load it asynchronously
-});
-
-// Load saved state asynchronously and merge it with current state
-const initializePersistedState = async () => {
-  try {
-    const persistedState = await loadState();
-    if (persistedState) {
-      // Dispatch an action to load the persisted state
-      // You'll need to add this action to your slices
-      store.dispatch({ type: "LOAD_PERSISTED_STATE", payload: persistedState });
-    }
-  } catch (error) {
-    debugLogger.error(
-      DEBUG_CATEGORIES.STORAGE,
-      "Failed to load persisted state",
-      error
-    );
-  }
+// Configure persistence
+const persistConfig = {
+  key: 'myscrollr_state',
+  storage,
+  whitelist: [
+    'finance',
+    'rss',
+    'layout',
+    'theme',
+    'pinned',
+    'power',
+    'toggles',
+    'auth',
+    'debug'
+  ],
+  // Don't persist certain fields
+  blacklist: [],
 };
 
-// Initialize persisted state only in browser
-if (typeof window !== 'undefined') {
-  initializePersistedState().catch((error) => {
-    debugLogger.error(
-      DEBUG_CATEGORIES.STORAGE,
-      "Failed to initialize persisted state",
-      error
-    );
-  });
+// Create persisted reducer
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  // Save state to extension storage whenever the store updates
-  // Debounce saves to avoid too frequent storage writes
-  let saveTimeout;
-  store.subscribe(() => {
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(async () => {
-      try {
-        await saveState(store.getState());
-      } catch (error) {
-        debugLogger.error(
-          DEBUG_CATEGORIES.STORAGE,
-          "Failed to save state",
-          error
-        );
-      }
-    }, 500); // Save 500ms after last change
-  });
-}
+// Create store with persisted reducer
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+// Create persistor
+export const persistor = persistStore(store);
 
 export default store;
