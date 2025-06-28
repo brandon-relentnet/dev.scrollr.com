@@ -1,103 +1,103 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Provider, useSelector } from "react-redux";
+import store from "../store";
+import PopupApp from "../popup/App";
+import IframeApp from "../iframe/App";
+
+function MyScrollrContent() {
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Get state from Redux
+  const layout = useSelector((state) => state.layout?.mode || "compact");
+  const position = useSelector((state) => state.layout?.position || "bottom");
+  const opacity = useSelector((state) => state.layout?.opacity || 1.0);
+  const power = useSelector((state) => state.power?.mode !== false);
+
+  // Height configurations based on layout mode
+  const heightConfig = {
+    compact: "h-16", // 64px
+    comfort: "h-44", // 176px
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center container mx-auto px-4">
+      <div className="mockup-browser border border-base-300 max-w-7xl w-full relative overflow-hidden">
+        <div className="mockup-browser-toolbar">
+          <div className="input">https://dev.myscrollr.com</div>
+        </div>
+        <div className="grid place-content-center h-160">
+          {/* Popup toggle button - adjusts position based on carousel */}
+          <label className="btn btn-circle swap swap-rotate absolute top-2 right-4 m-auto">
+            {/* this hidden checkbox controls the state */}
+            <input type="checkbox" onChange={() => setShowPopup(!showPopup)} />
+
+            {/* hamburger icon */}
+            <img
+              className="swap-off flex items-center justify-center p-1"
+              src="/icon-128.png"
+              alt="Menu"
+              width="32"
+              height="32"
+            />
+
+            {/* close icon */}
+            <svg
+              className="swap-on fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 512 512"
+            >
+              <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+            </svg>
+          </label>
+
+          {/* Popup iframe */}
+          <div
+            className={`h-160 p-3 overflow-hidden absolute top-14 right-4 transition-all duration-300 ease-in-out origin-right ${
+              showPopup ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+            }`}
+          >
+            <div className="w-[420px] shadow-lg h-auto bg-base-200 card card-border border-base-300">
+              <PopupApp />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Carousel iframe - responsive to settings */}
+      <div
+        className={`
+          fixed left-0 right-0 z-30 transition-all duration-300 ease-out
+          ${position === "top" ? "top-0" : "bottom-0"}
+          ${heightConfig[layout]}
+          ${power ? "pointer-events-auto" : "opacity-0 pointer-events-none"}
+          ${
+            power
+              ? position === "top"
+                ? "translate-y-0"
+                : "translate-y-0"
+              : position === "top"
+              ? "-translate-y-full"
+              : "translate-y-full"
+          }
+        `}
+        style={{
+          opacity: power ? opacity : 0,
+        }}
+      >
+        <IframeApp />
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <Provider store={store}>
+      <MyScrollrContent />
+    </Provider>
   );
 }
