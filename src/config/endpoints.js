@@ -157,7 +157,7 @@ export const buildWsUrl = (service, path = "/ws") => {
 export const API_BASE_URL = API_ENDPOINTS.accounts.base;
 
 // Export default for easier importing
-export default {
+const endpointsConfig = {
   API_ENDPOINTS,
   WS_ENDPOINTS,
   SERVICE_CONFIG,
@@ -165,3 +165,5 @@ export default {
   buildWsUrl,
   API_BASE_URL,
 };
+
+export default endpointsConfig;

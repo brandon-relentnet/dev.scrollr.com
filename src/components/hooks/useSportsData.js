@@ -276,7 +276,8 @@ export default function useSportsData() {
         wsRef.current = null;
       }
     };
-  }, [hasActiveSportsToggles, throttledSendMessage]);
+  }, [hasActiveSportsToggles, throttledSendMessage]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: debouncedSportsToggles, sendSportsFilterRequest intentionally omitted to prevent infinite loops
 
   // Handle sports toggles change - removed duplicate effect
   useEffect(() => {
@@ -302,7 +303,7 @@ export default function useSportsData() {
       isConnecting: isConnectingRef.current,
       dataCount: sportsData?.length || 0,
     });
-  }, [hasActiveSportsToggles, connectionStatus]);
+  }, [hasActiveSportsToggles, connectionStatus, sportsData?.length]);
 
   return {
     sportsData,

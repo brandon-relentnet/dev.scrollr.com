@@ -97,14 +97,7 @@ function useStableFinanceFilters(financeState) {
   // Calculate filters immediately when state changes
   const currentFilters = useMemo(
     () => calculateFinanceFilters(financeState),
-    [
-      financeState?.stocks?.enabled,
-      financeState?.stocks?.activePreset,
-      financeState?.crypto?.enabled,
-      financeState?.crypto?.activePreset,
-      JSON.stringify(financeState?.stocks?.customSelections),
-      JSON.stringify(financeState?.crypto?.customSelections),
-    ]
+    [financeState]
   );
 
   // Update stable filters immediately when current filters change
@@ -427,7 +420,8 @@ export default function useFinanceData() {
         wsRef.current.close(1000, "Component unmounting");
       }
     };
-  }, [hasFinanceFilters]); // Only reconnect when hasFinanceFilters changes
+  }, [hasFinanceFilters]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: financeFilters, sendFilterRequest, throttledSendMessage intentionally omitted to prevent infinite loops
 
   // FIX: Add debug logging for state changes
   useEffect(() => {

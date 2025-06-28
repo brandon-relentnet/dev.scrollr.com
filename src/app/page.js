@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Provider, useSelector } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import Image from "next/image";
 import store, { persistor } from "../store";
 import PopupApp from "../popup/App";
 import IframeApp from "../iframe/App";
@@ -43,12 +44,12 @@ function MyScrollrContent() {
             <input type="checkbox" onChange={() => setShowPopup(!showPopup)} />
 
             {/* hamburger icon */}
-            <img
+            <Image
               className="swap-off flex items-center justify-center p-1"
               src="/icon-128.png"
               alt="Menu"
-              width="32"
-              height="32"
+              width={32}
+              height={32}
             />
 
             {/* close icon */}

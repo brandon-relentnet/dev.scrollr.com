@@ -251,7 +251,8 @@ export default function SettingsTab() {
 
   useEffect(() => {
     setStorageSize(calculateStorageSize());
-  }, [theme, layout, finance, power, toggles, rss]);
+  }, [theme, layout, finance, power, toggles, rss]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: calculateStorageSize intentionally omitted to prevent infinite loops
 
   return (
     <>
