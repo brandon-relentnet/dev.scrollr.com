@@ -105,7 +105,6 @@ export default function ThemeTab() {
   const themeChange = (theme) => {
     debugLogger.uiEvent(`Theme changed to ${theme}`);
     dispatch(setTheme(theme));
-    document.documentElement.setAttribute("data-theme", theme);
     setTimeout(() => saveSettingsImmediately(), 100);
   };
 
@@ -260,7 +259,10 @@ export default function ThemeTab() {
                       )}
                     </label>
                     {isMounted && (
-                      <SpeedControl speed={speed} onChange={handleSpeedChange} />
+                      <SpeedControl
+                        speed={speed}
+                        onChange={handleSpeedChange}
+                      />
                     )}
                   </div>
                 </div>

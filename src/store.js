@@ -1,24 +1,31 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import rootReducer from "@/store/rootReducer.js";
-import authReducer from "./slices/authSlice";
-import debugReducer from "./slices/debugSlice";
 
 // Configure persistence
 const persistConfig = {
-  key: 'myscrollr_state',
+  key: "myscrollr_state",
   storage,
   whitelist: [
-    'finance',
-    'rss',
-    'layout',
-    'theme',
-    'pinned',
-    'power',
-    'toggles',
-    'auth',
-    'debug'
+    "finance",
+    "rss",
+    "layout",
+    "theme",
+    "pinned",
+    "power",
+    "toggles",
+    "auth",
+    "debug",
   ],
   // Don't persist certain fields
   blacklist: [],

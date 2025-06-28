@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { Provider, useSelector } from "react-redux";
-import { PersistGate } from 'redux-persist/integration/react';
+import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "../store";
 import PopupApp from "../popup/App";
 import IframeApp from "../iframe/App";
 import ClientOnly from "../components/ClientOnly";
+import { themeChange } from "theme-change";
 
 function MyScrollrContent() {
   const [showPopup, setShowPopup] = useState(false);
@@ -20,8 +21,8 @@ function MyScrollrContent() {
 
   useEffect(() => {
     setIsMounted(true);
+    themeChange(false);
   }, []);
-
 
   // Height configurations based on layout mode
   const heightConfig = {
