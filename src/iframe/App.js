@@ -1,18 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { themeChange } from "theme-change";
 import { useSelector } from "react-redux";
 import { Carousel } from "./Carousel";
 import PinnedOverlay from "./PinnedOverlay";
 
 export default function App() {
   const currentTheme = useSelector((state) => state.theme);
-
-  useEffect(() => {
-    // Initialize theme-change library
-    themeChange(false);
-  }, []);
 
   useEffect(() => {
     // Handle both string and object theme formats to match popup behavior

@@ -8,7 +8,7 @@
 
 @plugin "daisyui/theme" {
   name: "scrollr";
-  default: false;
+  default: true;
   prefersdark: false;
   color-scheme: "light";
   --color-base-100: oklch(98% 0.008 220); /* Very light with subtle blue tint */

@@ -6,7 +6,7 @@ const themeSlice = createSlice({
     mode: "scrollr", // Default theme mode
   },
   reducers: {
-    setTheme: (state, action) => {
+    setReduxTheme: (state, action) => {
       // Handle both string and object formats
       if (typeof action.payload === "string") {
         state.mode = action.payload;
@@ -18,5 +18,5 @@ const themeSlice = createSlice({
   },
 });
 
-export const { setTheme, setState } = themeSlice.actions;
+export const { setReduxTheme, setState } = themeSlice.actions;
 export default themeSlice.reducer;

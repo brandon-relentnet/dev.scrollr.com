@@ -1,6 +1,7 @@
 import { SwatchIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
-import { setTheme } from "@/store/themeSlice";
+import { setReduxTheme } from "@/store/themeSlice";
+import { useTheme } from "next-themes";
 import {
   setOpacity,
   setLayout,
@@ -17,6 +18,7 @@ import SpeedControl from "@/components/controls/SpeedControl";
 import { THEMES } from "./data";
 
 export default function ThemeTab() {
+  const { theme, setTheme } = useTheme();
   const dispatch = useDispatch();
   const { updateSetting } = useSettingsUpdate();
   const { saveSettingsImmediately } = useAuth();
@@ -103,8 +105,9 @@ export default function ThemeTab() {
   };
 
   const themeChange = (theme) => {
+    setTheme(theme);
     debugLogger.uiEvent(`Theme changed to ${theme}`);
-    dispatch(setTheme(theme));
+    dispatch(setReduxTheme(theme));
     setTimeout(() => saveSettingsImmediately(), 100);
   };
 
