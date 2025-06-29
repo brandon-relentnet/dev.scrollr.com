@@ -1,12 +1,24 @@
 "use client";
 
+import { useNextStep } from "nextstepjs";
+
 export default function TutorialPage() {
+  const {
+    startNextStep,
+    closeNextStep,
+    currentTour,
+    currentStep,
+    setCurrentStep,
+    isNextStepVisible,
+  } = useNextStep();
+  const handleStartTour = () => {
+    startNextStep("firsttour");
+  };
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">Tutorial Page</h1>
-      <p className="text-lg text-gray-700">
-        This is a simple tutorial page. You can add your content here.
-      </p>
+    <div className="min-h-screen flex flex-col justify-center items-center gap-10">
+      <button onClick={handleStartTour}>Start Tour</button>
+      <div id="tour1-step1" className="size-25 bg-yellow-500 shadow-lg"></div>
+      <div id="tour1-step2" className="size-25 bg-blue-500 shadow-lg"></div>
     </div>
   );
 }
