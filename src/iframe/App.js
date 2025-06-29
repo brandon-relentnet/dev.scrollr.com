@@ -44,6 +44,7 @@ export default function App({ isDemo = false }) {
           isDemo ? "absolute" : "fixed"
         } left-0 right-0 z-30 transition-all duration-300 ease-out
         ${position === "top" ? "top-0" : "bottom-0"}
+        ${!isDemo && position === "top" ? "!top-16" : ""}
         ${heightConfig[layout]}
         ${power ? "pointer-events-auto" : "pointer-events-none"}
         ${

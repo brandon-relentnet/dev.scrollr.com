@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import IframeApp from "@/iframe/App";
+import { useDevMode } from "@/hooks/useDevMode";
 import {
   ChartBarIcon,
   RssIcon,
@@ -13,79 +13,124 @@ import {
   CloudIcon,
   BoltIcon,
   PaintBrushIcon,
-  ShieldCheckIcon,
   CommandLineIcon,
+  CodeBracketIcon,
+  BeakerIcon,
+  CubeTransparentIcon,
+  SignalIcon,
+  DocumentTextIcon,
+  ServerIcon,
+  ShieldCheckIcon,
+  EyeIcon,
+  UserIcon,
+  AcademicCapIcon,
+  PlayIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import SvgIllustration from "@/components/ScrollrSVG";
 
 export default function Home() {
-  const [activeDemo, setActiveDemo] = useState("finance");
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const { devMode } = useDevMode();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setScrollPosition((prev) => (prev + 1) % 100);
-    }, 50);
-    return () => clearInterval(interval);
-  }, []);
-
-  const features = [
+  const userFeatures = [
     {
       icon: ChartBarIcon,
-      title: "Real-Time Markets",
-      description: "Professional-grade market data with millisecond updates",
+      title: "Live Financial Data",
+      description: "Track stocks, crypto, and forex in real-time",
       color: "text-success",
     },
     {
       icon: TrophyIcon,
-      title: "Live Sports",
-      description: "Never miss a moment with instant score updates",
+      title: "Sports Scores",
+      description: "Never miss a game with live score updates",
       color: "text-warning",
     },
     {
       icon: RssIcon,
-      title: "RSS Manager",
-      description: "Your personalized news command center",
+      title: "RSS News Feeds",
+      description: "Stay informed with your favorite news sources",
       color: "text-info",
     },
     {
-      icon: BoltIcon,
-      title: "Lightning Fast",
-      description: "Sub-100ms response times with React 19",
-      color: "text-primary",
+      icon: PaintBrushIcon,
+      title: "Beautiful Themes",
+      description: "Choose from 30+ stunning themes",
+      color: "text-accent",
     },
     {
       icon: CloudIcon,
       title: "Cloud Sync",
-      description: "Your settings follow you everywhere",
+      description: "Your settings sync across all devices",
       color: "text-secondary",
     },
     {
-      icon: PaintBrushIcon,
-      title: "30+ Themes",
-      description: "Beautiful themes for every preference",
-      color: "text-accent",
+      icon: BoltIcon,
+      title: "Lightning Fast",
+      description: "Instant updates with zero lag",
+      color: "text-primary",
     },
   ];
 
-  const demoContent = {
-    finance: [
-      "AAPL +2.34%",
-      "GOOGL +1.56%",
-      "TSLA -0.89%",
-      "BTC +5.21%",
-      "ETH +3.45%",
+  const devFeatures = [
+    {
+      icon: CodeBracketIcon,
+      title: "React 19 + TypeScript",
+      description: "Modern stack with full type safety",
+      color: "text-primary",
+    },
+    {
+      icon: CubeTransparentIcon,
+      title: "Microservices Architecture",
+      description: "Scalable backend with Docker deployment",
+      color: "text-secondary",
+    },
+    {
+      icon: BeakerIcon,
+      title: "WXT Framework",
+      description: "Next-gen extension development platform",
+      color: "text-accent",
+    },
+    {
+      icon: SignalIcon,
+      title: "WebSocket Streaming",
+      description: "Real-time data with institutional-grade APIs",
+      color: "text-success",
+    },
+    {
+      icon: DocumentTextIcon,
+      title: "Redux Toolkit",
+      description: "Predictable state management with persistence",
+      color: "text-info",
+    },
+    {
+      icon: ServerIcon,
+      title: "PostgreSQL + JWT",
+      description: "Enterprise security and data persistence",
+      color: "text-warning",
+    },
+  ];
+
+  const features = devMode ? devFeatures : userFeatures;
+
+  const heroContent = devMode ? {
+    title: "Scrollr",
+    subtitle: "Enterprise-Grade Browser Extension Framework",
+    description: "Built with React 19, TypeScript, and microservices architecture. Features WebSocket streaming, JWT authentication, and Docker deployment. Perfect for developers building real-time data applications.",
+    badges: [
+      "React 19", "TypeScript", "WXT Framework", "Docker Ready", 
+      "PostgreSQL", "WebSocket", "Microservices", "JWT Auth"
     ],
-    sports: [
-      "Lakers 112 - Celtics 108",
-      "Chiefs 28 - Bills 24",
-      "Yankees 5 - Dodgers 3",
+    primaryCta: "Explore Architecture",
+    secondaryCta: "Clone Repository"
+  } : {
+    title: "Scrollr",
+    subtitle: "Transform Your Browser Into a Data Powerhouse",
+    description: "Get live financial markets, sports scores, and news feeds right in your browser. Beautiful themes, cloud sync, and zero setup required. Join thousands of users who've supercharged their browsing experience.",
+    badges: [
+      "Real-Time Data", "30+ Themes", "Cloud Sync", "Zero Setup"
     ],
-    rss: [
-      "Breaking: Major Tech Announcement",
-      "New Framework Released",
-      "Market Analysis: Q4 Outlook",
-    ],
+    primaryCta: "Get Started Free",
+    secondaryCta: "Watch Demo"
   };
 
   return (
@@ -93,57 +138,59 @@ export default function Home() {
       {/* Hero Section */}
       <div className="hero min-h-[80vh] relative overflow-hidden">
         <div className="hero-content text-center z-10 container">
-          {/* Animated background ticker */}
           <div className="mockup-browser border border-base-300 backdrop-blur-sm overflow-hidden w-full">
             <div className="mockup-browser-toolbar h-8">
-              <div className="input">https://example.com</div>
+              <div className="input">
+                {devMode ? "https://localhost:3000" : "https://myscrollr.com"}
+              </div>
             </div>
-            <div className="relative w-full h-[60vh] w-full flex items-center justify-center">
+            <div className="relative w-full h-[60vh] flex items-center justify-center">
               <div className="max-w-4xl">
                 <div className="flex justify-center mb-6">
                   <SvgIllustration
                     width={100}
                     height={100}
-                    className={"animate-bounce"}
+                    className={devMode ? "animate-spin-slow" : "animate-bounce"}
                   />
                 </div>
                 <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  Scrollr
+                  {heroContent.title}
                 </h1>
                 <p className="text-2xl mb-8 text-base-content/80">
-                  Transform your browser into a real-time data powerhouse
+                  {heroContent.subtitle}
                 </p>
                 <p className="text-lg mb-10 max-w-2xl mx-auto">
-                  Blazing-fast browser extension that brings live financial
-                  markets, sports scores, and RSS feeds directly to your
-                  browser. Built with enterprise-grade architecture and a
-                  buttery-smooth experience.
+                  {heroContent.description}
                 </p>
 
                 <div className="flex gap-4 justify-center flex-wrap">
                   <Link
-                    href="/tutorial"
+                    href={devMode ? "/tutorial" : "/tutorial"}
                     className="btn btn-primary btn-lg gap-2"
                   >
-                    <SparklesIcon className="w-5 h-5" />
-                    Get Started
+                    {devMode ? <CodeBracketIcon className="w-5 h-5" /> : <SparklesIcon className="w-5 h-5" />}
+                    {heroContent.primaryCta}
                   </Link>
                   <a
-                    href="https://github.com/brandon-relentnet/scrollr"
-                    target="_blank"
+                    href={devMode ? "https://github.com/brandon-relentnet/scrollr" : "#demo"}
+                    target={devMode ? "_blank" : "_self"}
                     className="btn btn-outline btn-lg gap-2"
                   >
-                    <CommandLineIcon className="w-5 h-5" />
-                    View on GitHub
+                    {devMode ? <CommandLineIcon className="w-5 h-5" /> : <PlayIcon className="w-5 h-5" />}
+                    {heroContent.secondaryCta}
                   </a>
                 </div>
 
-                {/* Floating badges */}
                 <div className="flex gap-2 justify-center mt-8 flex-wrap">
-                  <div className="badge badge-primary">React 19</div>
-                  <div className="badge badge-secondary">TypeScript</div>
-                  <div className="badge badge-accent">WXT Framework</div>
-                  <div className="badge badge-info">Docker Ready</div>
+                  {heroContent.badges.map((badge, i) => (
+                    <div key={i} className={`badge ${
+                      devMode ? 
+                        ['badge-primary', 'badge-secondary', 'badge-accent', 'badge-info', 'badge-success', 'badge-warning', 'badge-error', 'badge-neutral'][i % 8] :
+                        ['badge-primary', 'badge-secondary', 'badge-accent', 'badge-info'][i % 4]
+                    }`}>
+                      {badge}
+                    </div>
+                  ))}
                 </div>
               </div>
               <IframeApp isDemo={true} />
@@ -152,15 +199,24 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Features Grid */}
-      <div className="py-20 px-4">
+      {/* Mode-Specific Features Grid */}
+      <div className="py-20 px-4 bg-base-200">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-4">
-            Why MyScrollr?
-          </h2>
-          <p className="text-center text-lg mb-12 text-base-content/70">
-            Everything you need for real-time data, right in your browser
-          </p>
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 mb-4">
+              {devMode ? <CodeBracketIcon className="w-8 h-8 text-primary" /> : <UserIcon className="w-8 h-8 text-primary" />}
+              <span className="badge badge-primary">{devMode ? "Developer Mode" : "User Mode"}</span>
+            </div>
+            <h2 className="text-4xl font-bold mb-4">
+              {devMode ? "Built for Developers" : "Why Choose Scrollr?"}
+            </h2>
+            <p className="text-center text-lg text-base-content/70">
+              {devMode ? 
+                "Enterprise-grade architecture with modern development practices" :
+                "Everything you need for real-time data, right in your browser"
+              }
+            </p>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, i) => (
@@ -179,159 +235,210 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Interactive Demo Section */}
-      <div className="py-20 bg-base-200">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            See It In Action
-          </h2>
-
-          <div className="tabs tabs-boxed justify-center mb-8">
-            <a
-              className={`tab tab-lg ${
-                activeDemo === "finance" ? "tab-active" : ""
-              }`}
-              onClick={() => setActiveDemo("finance")}
-            >
-              <ChartBarIcon className="w-5 h-5 mr-2" />
-              Finance
-            </a>
-            <a
-              className={`tab tab-lg ${
-                activeDemo === "sports" ? "tab-active" : ""
-              }`}
-              onClick={() => setActiveDemo("sports")}
-            >
-              <TrophyIcon className="w-5 h-5 mr-2" />
-              Sports
-            </a>
-            <a
-              className={`tab tab-lg ${
-                activeDemo === "rss" ? "tab-active" : ""
-              }`}
-              onClick={() => setActiveDemo("rss")}
-            >
-              <RssIcon className="w-5 h-5 mr-2" />
-              RSS
-            </a>
-          </div>
-
-          <div className="mockup-browser border bg-base-300">
-            <div className="mockup-browser-toolbar">
-              <div className="input">https://example.com</div>
+      {/* Mode-Specific Deep Dive Section */}
+      {devMode ? (
+        /* Developer Deep Dive */
+        <div className="py-20">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12">
+              Technical Architecture
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <CommandLineIcon className="w-8 h-8 text-primary mb-2" />
+                  <h3 className="card-title">One-Command Development</h3>
+                  <div className="mockup-code">
+                    <pre><code># Clone and start everything</code></pre>
+                    <pre><code>git clone https://github.com/brandon-relentnet/scrollr.git</code></pre>
+                    <pre><code>cd scrollr && make dev-up && npm run dev</code></pre>
+                    <pre><code># Load extension: chrome://extensions/</code></pre>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="card bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <ServerIcon className="w-8 h-8 text-secondary mb-2" />
+                  <h3 className="card-title">Microservices Stack</h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-success rounded-full"></div>
+                      <span>Accounts API (JWT + PostgreSQL)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-warning rounded-full"></div>
+                      <span>Finance API (WebSocket + Finnhub)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-info rounded-full"></div>
+                      <span>Sports API (ESPN + Cron Jobs)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-accent rounded-full"></div>
+                      <span>Frontend (React 19 + WXT)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="bg-base-200 px-4 py-16 min-h-[400px] relative">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold mb-2">
-                  Your favorite website here
-                </h3>
-                <p className="text-base-content/60">
-                  MyScrollr overlay appears at the bottom
-                </p>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="card bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                <div className="card-body">
+                  <BeakerIcon className="w-8 h-8 text-primary mb-2" />
+                  <h3 className="card-title">Advanced Features</h3>
+                  <ul className="space-y-1 text-sm">
+                    <li>• Hot Module Replacement</li>
+                    <li>• TypeScript Strict Mode</li>
+                    <li>• Redux DevTools Integration</li>
+                    <li>• 8-Category Debug Logging</li>
+                    <li>• Health Monitoring APIs</li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Simulated ticker */}
-              <div className="absolute bottom-0 left-0 right-0 bg-base-100 border-t border-base-300 h-16">
-                <div className="flex items-center h-full overflow-hidden">
-                  <div className="flex gap-6 animate-scroll-left">
-                    {[...Array(2)].map((_, i) => (
-                      <div key={i} className="flex gap-6 px-6">
-                        {demoContent[activeDemo].map((item, j) => (
-                          <div
-                            key={j}
-                            className="flex items-center gap-2 whitespace-nowrap"
-                          >
-                            {activeDemo === "finance" && (
-                              <ChartBarIcon className="w-4 h-4 text-success" />
-                            )}
-                            {activeDemo === "sports" && (
-                              <TrophyIcon className="w-4 h-4 text-warning" />
-                            )}
-                            {activeDemo === "rss" && (
-                              <RssIcon className="w-4 h-4 text-info" />
-                            )}
-                            <span className="font-mono">{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
+              <div className="card bg-gradient-to-br from-secondary/10 to-secondary/5 border border-secondary/20">
+                <div className="card-body">
+                  <ShieldCheckIcon className="w-8 h-8 text-secondary mb-2" />
+                  <h3 className="card-title">Security & Performance</h3>
+                  <ul className="space-y-1 text-sm">
+                    <li>• JWT Stateless Authentication</li>
+                    <li>• bcrypt Password Hashing</li>
+                    <li>• Rate Limiting (60 req/min)</li>
+                    <li>• CORS Protection</li>
+                    <li>• Sub-100ms Response Times</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="card bg-gradient-to-br from-accent/10 to-accent/5 border border-accent/20">
+                <div className="card-body">
+                  <CubeTransparentIcon className="w-8 h-8 text-accent mb-2" />
+                  <h3 className="card-title">Deployment Ready</h3>
+                  <ul className="space-y-1 text-sm">
+                    <li>• Docker Compose Stack</li>
+                    <li>• Nginx Load Balancing</li>
+                    <li>• Automated Backups</li>
+                    <li>• SSL/TLS Termination</li>
+                    <li>• Production Monitoring</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* User-Friendly Section */
+        <div className="py-20" id="demo">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-12">
+              See It In Action
+            </h2>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              <div className="card bg-gradient-to-br from-success/10 to-success/5 border border-success/20">
+                <div className="card-body">
+                  <ChartBarIcon className="w-12 h-12 text-success mb-4" />
+                  <h3 className="card-title">Financial Markets</h3>
+                  <p className="mb-4">Track your investments with professional-grade market data. Get real-time quotes for stocks, crypto, and forex.</p>
+                  <div className="badge badge-success">Live Updates</div>
+                </div>
+              </div>
+
+              <div className="card bg-gradient-to-br from-warning/10 to-warning/5 border border-warning/20">
+                <div className="card-body">
+                  <TrophyIcon className="w-12 h-12 text-warning mb-4" />
+                  <h3 className="card-title">Sports Scores</h3>
+                  <p className="mb-4">Never miss a game with live scores from NFL, NBA, NHL, and MLB. Get quarter info and game status.</p>
+                  <div className="badge badge-warning">Multi-League</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div className="mockup-browser border bg-base-200 max-w-4xl mx-auto">
+                <div className="mockup-browser-toolbar">
+                  <div className="input">https://example.com</div>
+                </div>
+                <div className="bg-base-100 px-6 py-16 min-h-[300px] relative">
+                  <div className="text-center">
+                    <h3 className="text-2xl font-bold mb-2">Your favorite website</h3>
+                    <p className="text-base-content/60 mb-8">Scrollr appears as a sleek overlay</p>
+                    <div className="flex items-center justify-center gap-4">
+                      <EyeIcon className="w-6 h-6 text-primary" />
+                      <span>Unobtrusive and beautiful</span>
+                    </div>
+                  </div>
+                  
+                  {/* Demo ticker at bottom */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-base-300 h-12 flex items-center overflow-hidden">
+                    <div className="flex gap-6 animate-scroll whitespace-nowrap px-4">
+                      <span className="text-success">AAPL +2.5%</span>
+                      <span className="text-error">TSLA -1.2%</span>
+                      <span className="text-info">BTC +5.8%</span>
+                      <span className="text-warning">Lakers 108-102</span>
+                      <span>Tech News: New Framework Released</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Developer Features */}
-      <div className="py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12">
-            Built for Developers
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <CommandLineIcon className="w-8 h-8 text-primary mb-2" />
-                <h3 className="card-title">One-Command Setup</h3>
-                <div className="mockup-code">
-                  <pre>
-                    <code>
-                      git clone https://github.com/brandon-relentnet/scrollr.git
-                    </code>
-                  </pre>
-                  <pre>
-                    <code>cd scrollr && make dev-up</code>
-                  </pre>
-                  <pre>
-                    <code>npm run dev</code>
-                  </pre>
-                </div>
-              </div>
-            </div>
-
-            <div className="card bg-base-100 shadow-xl">
-              <div className="card-body">
-                <CogIcon className="w-8 h-8 text-secondary mb-2" />
-                <h3 className="card-title">Microservices Architecture</h3>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>JWT Authentication Service</li>
-                  <li>Real-time Finance WebSocket API</li>
-                  <li>Live Sports Data Service</li>
-                  <li>Docker Production Ready</li>
-                  <li>Health Monitoring & Metrics</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-r from-primary to-secondary">
+      {/* Mode-Specific CTA Section */}
+      <div className={`py-20 ${devMode ? 'bg-gradient-to-r from-neutral to-base-300' : 'bg-gradient-to-r from-primary to-secondary'}`}>
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold text-primary-content mb-6">
-            Ready to Transform Your Browser?
+          <h2 className={`text-4xl font-bold mb-6 ${devMode ? 'text-base-content' : 'text-primary-content'}`}>
+            {devMode ? "Ready to Build Something Amazing?" : "Ready to Transform Your Browser?"}
           </h2>
-          <p className="text-xl text-primary-content/80 mb-8">
-            Join thousands of users who've supercharged their browsing
-            experience
+          <p className={`text-xl mb-8 ${devMode ? 'text-base-content/70' : 'text-primary-content/80'}`}>
+            {devMode ? 
+              "Clone the repository and start contributing to the open-source community" :
+              "Join thousands of users who've supercharged their browsing experience"
+            }
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
-            <Link
-              href="/tutorial"
-              className="btn btn-lg btn-primary bg-base-100 text-primary hover:bg-base-200 border-0"
-            >
-              Start Tutorial
-            </Link>
-            <a
-              href="https://github.com/brandon-relentnet/scrollr/releases"
-              target="_blank"
-              className="btn btn-lg btn-outline btn-primary border-base-100 text-base-100 hover:bg-base-100 hover:text-primary"
-            >
-              Download Extension
-            </a>
+            {devMode ? (
+              <>
+                <a
+                  href="https://github.com/brandon-relentnet/scrollr"
+                  target="_blank"
+                  className="btn btn-lg btn-primary gap-2"
+                >
+                  <CommandLineIcon className="w-5 h-5" />
+                  Clone Repository
+                </a>
+                <Link
+                  href="/tutorial"
+                  className="btn btn-lg btn-outline gap-2"
+                >
+                  <AcademicCapIcon className="w-5 h-5" />
+                  Developer Docs
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/tutorial"
+                  className="btn btn-lg btn-primary bg-base-100 text-primary hover:bg-base-200 border-0 gap-2"
+                >
+                  <SparklesIcon className="w-5 h-5" />
+                  Start Free Tutorial
+                </Link>
+                <a
+                  href="https://github.com/brandon-relentnet/scrollr/releases"
+                  target="_blank"
+                  className="btn btn-lg btn-outline btn-primary border-base-100 text-base-100 hover:bg-base-100 hover:text-primary gap-2"
+                >
+                  <ArrowDownTrayIcon className="w-5 h-5" />
+                  Download Extension
+                </a>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -339,17 +446,13 @@ export default function Home() {
       {/* Footer */}
       <footer className="footer footer-center p-10 bg-base-200 text-base-content">
         <div>
-          <Image
-            src="/icon-128.png"
-            alt="MyScrollr"
-            width={50}
-            height={50}
-            className="mb-4"
-          />
-          <p className="font-bold">MyScrollr - Real-Time Data Ticker</p>
-          <p>Built with ❤️ by the MyScrollr Community</p>
+          <SvgIllustration width={50} height={50} className="mb-4" />
+          <p className="font-bold">
+            {devMode ? "Scrollr - Open Source Extension Framework" : "Scrollr - Real-Time Data Ticker"}
+          </p>
+          <p>Built with ❤️ by the Scrollr Community</p>
           <p className="text-sm opacity-70">
-            © 2024 MyScrollr. Mozilla Public License 2.0
+            © 2024 Scrollr. Mozilla Public License 2.0
           </p>
         </div>
         <div>
@@ -384,6 +487,23 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes scroll {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(-100%); }
+        }
+        .animate-scroll {
+          animation: scroll 15s linear infinite;
+        }
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+          animation: spin-slow 3s linear infinite;
+        }
+      `}</style>
     </div>
   );
 }
