@@ -12,7 +12,7 @@ export default function DisplayTab() {
 
   return (
     <>
-      <label className="tab">
+      <label className="tab" id="popup-tabs-display">
         <input
           type="radio"
           name="my_tabs_3"

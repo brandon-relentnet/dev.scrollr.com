@@ -9,7 +9,10 @@ import SettingsTab from "./tabs/SettingsTab.js";
 
 export default function Popup() {
   return (
-    <div className="tabs tabs-lift p-2 overflow-hidden relative">
+    <div
+      className="tabs tabs-lift p-2 overflow-hidden relative"
+      id="popup-tabs"
+    >
       {/* CENTER THE TABS */}
       <span className="tab w-[42px]">&nbsp;</span>
 

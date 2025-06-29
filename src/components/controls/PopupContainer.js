@@ -2,15 +2,19 @@
 
 import SvgIllustration from "@/components/ScrollrSVG";
 import PopupApp from "@/popup/App";
-import { useState } from "react";
+import { usePopup } from "@/hooks/usePopup";
 
 export default function PopupContainer() {
-  const [showPopup, setShowPopup] = useState(false);
+  const { isOpen, toggle } = usePopup();
 
   return (
     <>
-      <label className="btn btn-ghost swap swap-rotate z-50">
-        <input type="checkbox" onChange={() => setShowPopup(!showPopup)} />
+      <label className="btn btn-ghost swap swap-rotate z-50" id="popup-toggle">
+        <input 
+          type="checkbox" 
+          checked={isOpen}
+          onChange={toggle} 
+        />
         <SvgIllustration
           width={32}
           height={32}
@@ -29,7 +33,7 @@ export default function PopupContainer() {
       {/* Popup iframe */}
       <div
         className={`h-160 p-3 overflow-hidden fixed top-16 right-0 z-40 transition-all duration-300 ease-in-out origin-right ${
-          showPopup ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+          isOpen ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
         }`}
       >
         <div className="w-[420px] shadow-lg h-auto bg-base-200 card card-border border-base-300">

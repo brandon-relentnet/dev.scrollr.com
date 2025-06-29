@@ -9,6 +9,7 @@ import PinnedReducer from "./pinnedSlice.js";
 import AuthReducer from "../slices/authSlice.js";
 import DebugReducer from "../slices/debugSlice.js";
 import DevModeReducer from "./devModeSlice.js";
+import PopupReducer from "./popupSlice.js";
 
 const rootReducer = combineReducers({
   // Add your reducers here
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
   debug: DebugReducer,
   devMode: DevModeReducer,
+  popup: PopupReducer,
 });
 
 export default rootReducer;

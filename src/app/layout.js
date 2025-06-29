@@ -6,6 +6,7 @@ import { NextStepProvider, NextStep } from "nextstepjs";
 import ClientOnly from "../components/ClientOnly";
 import ReduxProvider from "@/components/ReduxProvider";
 import GlobalOverlay from "@/components/GlobalOverlay";
+import TutorialCard from "@/components/TutorialCard";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,29 +25,53 @@ export const metadata = {
 
 const steps = [
   {
-    tour: "firsttour",
+    tour: "popupTour",
     steps: [
       {
         icon: <>👋</>,
-        title: "Tour 1, Step 1",
-        content: <>First tour, first step</>,
-        selector: "#tour1-step1",
-        side: "left",
+        title: "Open the Menu",
+        content: (
+          <>
+            Pin the extension to your toolbar, then click the icon to open it.
+          </>
+        ),
+        selector: "#popup-toggle",
+        side: "top-right",
         showControls: true,
-        showSkip: true,
-        pointerPadding: 10,
-        pointerRadius: 10,
+        pointerPadding: 8,
+        pointerRadius: 8,
       },
       {
         icon: <>🎉</>,
-        title: "Tour 1, Step 2",
-        content: <>First tour, second step</>,
-        selector: "#tour1-step2",
-        side: "left",
+        title: "The Popup",
+        content: (
+          <>
+            This is the <span className="italic">control center</span> of
+            Scrollr.
+          </>
+        ),
+        selector: "#popup-tabs",
+        side: "top-right",
         showControls: true,
         showSkip: true,
-        pointerPadding: 10,
-        pointerRadius: 10,
+        pointerPadding: 8,
+        pointerRadius: 8,
+      },
+      {
+        icon: <>🎉</>,
+        title: "The Display Tab",
+        content: (
+          <>
+            Where you can control what you want to see. Customize your Scrollr
+            experience here.
+          </>
+        ),
+        selector: "#popup-tabs-display",
+        side: "top-right",
+        showControls: true,
+        showSkip: true,
+        pointerPadding: 8,
+        pointerRadius: 8,
       },
     ],
   },
@@ -62,7 +87,7 @@ export default function RootLayout({ children }) {
           <ClientOnly>
             <ReduxProvider>
               <NextStepProvider>
-                <NextStep steps={steps}>
+                <NextStep steps={steps} cardComponent={TutorialCard}>
                   <Navbar />
                   {children}
                   <GlobalOverlay />

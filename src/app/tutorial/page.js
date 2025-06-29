@@ -12,13 +12,13 @@ export default function TutorialPage() {
     isNextStepVisible,
   } = useNextStep();
   const handleStartTour = () => {
-    startNextStep("firsttour");
+    startNextStep("popupTour");
   };
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center gap-10">
-      <button onClick={handleStartTour}>Start Tour</button>
-      <div id="tour1-step1" className="size-25 bg-yellow-500 shadow-lg"></div>
-      <div id="tour1-step2" className="size-25 bg-blue-500 shadow-lg"></div>
+    <div className="flex flex-col justify-center items-center gap-10 min-h-[calc(100vh-4rem)]">
+      <button onClick={handleStartTour} className="btn btn-xl btn-primary">
+        Start Tour
+      </button>
     </div>
   );
 }
