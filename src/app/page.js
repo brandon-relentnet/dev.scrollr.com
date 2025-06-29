@@ -1,117 +1,389 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Provider, useSelector } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import Image from "next/image";
-import store, { persistor } from "../store";
-import PopupApp from "../popup/App";
-import IframeApp from "../iframe/App";
-import ClientOnly from "../components/ClientOnly";
+import Link from "next/link";
+import IframeApp from "@/iframe/App";
+import {
+  ChartBarIcon,
+  RssIcon,
+  TrophyIcon,
+  SparklesIcon,
+  CogIcon,
+  CloudIcon,
+  BoltIcon,
+  PaintBrushIcon,
+  ShieldCheckIcon,
+  CommandLineIcon,
+} from "@heroicons/react/24/outline";
+import SvgIllustration from "@/components/ScrollrSVG";
 
-function MyScrollrContent() {
-  const [showPopup, setShowPopup] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Get state from Redux
-  const layout = useSelector((state) => state.layout?.mode || "compact");
-  const position = useSelector((state) => state.layout?.position || "bottom");
-  const opacity = useSelector((state) => state.layout?.opacity ?? 1.0);
-  const power = useSelector((state) => state.power?.mode !== false);
+export default function Home() {
+  const [activeDemo, setActiveDemo] = useState("finance");
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    setIsMounted(true);
+    const interval = setInterval(() => {
+      setScrollPosition((prev) => (prev + 1) % 100);
+    }, 50);
+    return () => clearInterval(interval);
   }, []);
 
-  // Height configurations based on layout mode
-  const heightConfig = {
-    compact: "h-16", // 64px
-    comfort: "h-44", // 176px
+  const features = [
+    {
+      icon: ChartBarIcon,
+      title: "Real-Time Markets",
+      description: "Professional-grade market data with millisecond updates",
+      color: "text-success",
+    },
+    {
+      icon: TrophyIcon,
+      title: "Live Sports",
+      description: "Never miss a moment with instant score updates",
+      color: "text-warning",
+    },
+    {
+      icon: RssIcon,
+      title: "RSS Manager",
+      description: "Your personalized news command center",
+      color: "text-info",
+    },
+    {
+      icon: BoltIcon,
+      title: "Lightning Fast",
+      description: "Sub-100ms response times with React 19",
+      color: "text-primary",
+    },
+    {
+      icon: CloudIcon,
+      title: "Cloud Sync",
+      description: "Your settings follow you everywhere",
+      color: "text-secondary",
+    },
+    {
+      icon: PaintBrushIcon,
+      title: "30+ Themes",
+      description: "Beautiful themes for every preference",
+      color: "text-accent",
+    },
+  ];
+
+  const demoContent = {
+    finance: [
+      "AAPL +2.34%",
+      "GOOGL +1.56%",
+      "TSLA -0.89%",
+      "BTC +5.21%",
+      "ETH +3.45%",
+    ],
+    sports: [
+      "Lakers 112 - Celtics 108",
+      "Chiefs 28 - Bills 24",
+      "Yankees 5 - Dodgers 3",
+    ],
+    rss: [
+      "Breaking: Major Tech Announcement",
+      "New Framework Released",
+      "Market Analysis: Q4 Outlook",
+    ],
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center container mx-auto px-4">
-      <div className="mockup-browser border border-base-300 max-w-7xl w-full relative overflow-hidden">
-        <div className="mockup-browser-toolbar">
-          <div className="input">https://dev.myscrollr.com</div>
-        </div>
-        <div className="grid place-content-center h-160">
-          {/* Popup toggle button - adjusts position based on carousel */}
-          <label className="btn btn-circle swap swap-rotate absolute top-2 right-4 m-auto">
-            {/* this hidden checkbox controls the state */}
-            <input type="checkbox" onChange={() => setShowPopup(!showPopup)} />
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <div className="hero min-h-[80vh] relative overflow-hidden">
+        <div className="hero-content text-center z-10 container">
+          {/* Animated background ticker */}
+          <div className="mockup-browser border border-base-300 backdrop-blur-sm overflow-hidden w-full">
+            <div className="mockup-browser-toolbar h-8">
+              <div className="input">https://example.com</div>
+            </div>
+            <div className="relative w-full h-[60vh] w-full flex items-center justify-center">
+              <div className="max-w-4xl">
+                <div className="flex justify-center mb-6">
+                  <SvgIllustration
+                    width={100}
+                    height={100}
+                    className={"animate-bounce"}
+                  />
+                </div>
+                <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Scrollr
+                </h1>
+                <p className="text-2xl mb-8 text-base-content/80">
+                  Transform your browser into a real-time data powerhouse
+                </p>
+                <p className="text-lg mb-10 max-w-2xl mx-auto">
+                  Blazing-fast browser extension that brings live financial
+                  markets, sports scores, and RSS feeds directly to your
+                  browser. Built with enterprise-grade architecture and a
+                  buttery-smooth experience.
+                </p>
 
-            {/* hamburger icon */}
-            <Image
-              className="swap-off flex items-center justify-center p-1"
-              src="/icon-128.png"
-              alt="Menu"
-              width={32}
-              height={32}
-            />
+                <div className="flex gap-4 justify-center flex-wrap">
+                  <Link
+                    href="/tutorial"
+                    className="btn btn-primary btn-lg gap-2"
+                  >
+                    <SparklesIcon className="w-5 h-5" />
+                    Get Started
+                  </Link>
+                  <a
+                    href="https://github.com/brandon-relentnet/scrollr"
+                    target="_blank"
+                    className="btn btn-outline btn-lg gap-2"
+                  >
+                    <CommandLineIcon className="w-5 h-5" />
+                    View on GitHub
+                  </a>
+                </div>
 
-            {/* close icon */}
-            <svg
-              className="swap-on fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
-            >
-              <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-            </svg>
-          </label>
-
-          {/* Popup iframe */}
-          <div
-            className={`h-160 p-3 overflow-hidden absolute top-14 right-4 transition-all duration-300 ease-in-out origin-right ${
-              showPopup ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
-            }`}
-          >
-            <div className="w-[420px] shadow-lg h-auto bg-base-200 card card-border border-base-300">
-              <PopupApp />
+                {/* Floating badges */}
+                <div className="flex gap-2 justify-center mt-8 flex-wrap">
+                  <div className="badge badge-primary">React 19</div>
+                  <div className="badge badge-secondary">TypeScript</div>
+                  <div className="badge badge-accent">WXT Framework</div>
+                  <div className="badge badge-info">Docker Ready</div>
+                </div>
+              </div>
+              <IframeApp isDemo={true} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Carousel iframe - responsive to settings */}
-      {isMounted && (
-        <div
-          className={`
-            fixed left-0 right-0 z-30 transition-all duration-300 ease-out
-            ${position === "top" ? "top-0" : "bottom-0"}
-            ${heightConfig[layout]}
-            ${power ? "pointer-events-auto" : "pointer-events-none"}
-            ${
-              power
-                ? position === "top"
-                  ? "translate-y-0"
-                  : "translate-y-0"
-                : position === "top"
-                ? "-translate-y-full"
-                : "translate-y-full"
-            }
-          `}
-          style={{
-            opacity: power ? opacity : 0,
-          }}
-        >
-          <IframeApp />
-        </div>
-      )}
-    </div>
-  );
-}
+      {/* Features Grid */}
+      <div className="py-20 px-4">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-4">
+            Why MyScrollr?
+          </h2>
+          <p className="text-center text-lg mb-12 text-base-content/70">
+            Everything you need for real-time data, right in your browser
+          </p>
 
-export default function Home() {
-  return (
-    <ClientOnly>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <MyScrollrContent />
-        </PersistGate>
-      </Provider>
-    </ClientOnly>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, i) => (
+              <div
+                key={i}
+                className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all"
+              >
+                <div className="card-body">
+                  <feature.icon className={`w-12 h-12 ${feature.color} mb-4`} />
+                  <h3 className="card-title">{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Interactive Demo Section */}
+      <div className="py-20 bg-base-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            See It In Action
+          </h2>
+
+          <div className="tabs tabs-boxed justify-center mb-8">
+            <a
+              className={`tab tab-lg ${
+                activeDemo === "finance" ? "tab-active" : ""
+              }`}
+              onClick={() => setActiveDemo("finance")}
+            >
+              <ChartBarIcon className="w-5 h-5 mr-2" />
+              Finance
+            </a>
+            <a
+              className={`tab tab-lg ${
+                activeDemo === "sports" ? "tab-active" : ""
+              }`}
+              onClick={() => setActiveDemo("sports")}
+            >
+              <TrophyIcon className="w-5 h-5 mr-2" />
+              Sports
+            </a>
+            <a
+              className={`tab tab-lg ${
+                activeDemo === "rss" ? "tab-active" : ""
+              }`}
+              onClick={() => setActiveDemo("rss")}
+            >
+              <RssIcon className="w-5 h-5 mr-2" />
+              RSS
+            </a>
+          </div>
+
+          <div className="mockup-browser border bg-base-300">
+            <div className="mockup-browser-toolbar">
+              <div className="input">https://example.com</div>
+            </div>
+            <div className="bg-base-200 px-4 py-16 min-h-[400px] relative">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold mb-2">
+                  Your favorite website here
+                </h3>
+                <p className="text-base-content/60">
+                  MyScrollr overlay appears at the bottom
+                </p>
+              </div>
+
+              {/* Simulated ticker */}
+              <div className="absolute bottom-0 left-0 right-0 bg-base-100 border-t border-base-300 h-16">
+                <div className="flex items-center h-full overflow-hidden">
+                  <div className="flex gap-6 animate-scroll-left">
+                    {[...Array(2)].map((_, i) => (
+                      <div key={i} className="flex gap-6 px-6">
+                        {demoContent[activeDemo].map((item, j) => (
+                          <div
+                            key={j}
+                            className="flex items-center gap-2 whitespace-nowrap"
+                          >
+                            {activeDemo === "finance" && (
+                              <ChartBarIcon className="w-4 h-4 text-success" />
+                            )}
+                            {activeDemo === "sports" && (
+                              <TrophyIcon className="w-4 h-4 text-warning" />
+                            )}
+                            {activeDemo === "rss" && (
+                              <RssIcon className="w-4 h-4 text-info" />
+                            )}
+                            <span className="font-mono">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Developer Features */}
+      <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            Built for Developers
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <CommandLineIcon className="w-8 h-8 text-primary mb-2" />
+                <h3 className="card-title">One-Command Setup</h3>
+                <div className="mockup-code">
+                  <pre>
+                    <code>
+                      git clone https://github.com/brandon-relentnet/scrollr.git
+                    </code>
+                  </pre>
+                  <pre>
+                    <code>cd scrollr && make dev-up</code>
+                  </pre>
+                  <pre>
+                    <code>npm run dev</code>
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <CogIcon className="w-8 h-8 text-secondary mb-2" />
+                <h3 className="card-title">Microservices Architecture</h3>
+                <ul className="list-disc list-inside space-y-1">
+                  <li>JWT Authentication Service</li>
+                  <li>Real-time Finance WebSocket API</li>
+                  <li>Live Sports Data Service</li>
+                  <li>Docker Production Ready</li>
+                  <li>Health Monitoring & Metrics</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="py-20 bg-gradient-to-r from-primary to-secondary">
+        <div className="max-w-4xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-bold text-primary-content mb-6">
+            Ready to Transform Your Browser?
+          </h2>
+          <p className="text-xl text-primary-content/80 mb-8">
+            Join thousands of users who've supercharged their browsing
+            experience
+          </p>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link
+              href="/tutorial"
+              className="btn btn-lg btn-primary bg-base-100 text-primary hover:bg-base-200 border-0"
+            >
+              Start Tutorial
+            </Link>
+            <a
+              href="https://github.com/brandon-relentnet/scrollr/releases"
+              target="_blank"
+              className="btn btn-lg btn-outline btn-primary border-base-100 text-base-100 hover:bg-base-100 hover:text-primary"
+            >
+              Download Extension
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="footer footer-center p-10 bg-base-200 text-base-content">
+        <div>
+          <Image
+            src="/icon-128.png"
+            alt="MyScrollr"
+            width={50}
+            height={50}
+            className="mb-4"
+          />
+          <p className="font-bold">MyScrollr - Real-Time Data Ticker</p>
+          <p>Built with ❤️ by the MyScrollr Community</p>
+          <p className="text-sm opacity-70">
+            © 2024 MyScrollr. Mozilla Public License 2.0
+          </p>
+        </div>
+        <div>
+          <div className="grid grid-flow-col gap-4">
+            <a
+              href="https://github.com/brandon-relentnet/scrollr"
+              target="_blank"
+              className="link link-hover"
+            >
+              GitHub
+            </a>
+            <a
+              href="https://github.com/brandon-relentnet/scrollr/issues"
+              target="_blank"
+              className="link link-hover"
+            >
+              Issues
+            </a>
+            <a
+              href="https://github.com/brandon-relentnet/scrollr/discussions"
+              target="_blank"
+              className="link link-hover"
+            >
+              Discussions
+            </a>
+            <a
+              href="mailto:scrollr-support@relentnet.dev"
+              className="link link-hover"
+            >
+              Support
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }

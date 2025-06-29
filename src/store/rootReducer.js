@@ -8,18 +8,20 @@ import RssReducer from "./rssSlice.js";
 import PinnedReducer from "./pinnedSlice.js";
 import AuthReducer from "../slices/authSlice.js";
 import DebugReducer from "../slices/debugSlice.js";
+import DevModeReducer from "./devModeSlice.js";
 
 const rootReducer = combineReducers({
-    // Add your reducers here
-    theme: ThemeReducer,
-    toggles: TogglesReducer,
-    finance: FinanceReducer,
-    power: PowerReducer,
-    layout: LayoutReducer,
-    rss: RssReducer,
-    pinned: PinnedReducer,
-    auth: AuthReducer,
-    debug: DebugReducer,
-})
+  // Add your reducers here
+  theme: ThemeReducer,
+  toggles: TogglesReducer,
+  finance: FinanceReducer,
+  power: PowerReducer,
+  layout: LayoutReducer,
+  rss: RssReducer,
+  pinned: PinnedReducer,
+  auth: AuthReducer,
+  debug: DebugReducer,
+  devMode: DevModeReducer,
+});
 
 export default rootReducer;
