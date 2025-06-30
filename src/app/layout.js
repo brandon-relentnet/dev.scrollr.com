@@ -25,7 +25,7 @@ export const metadata = {
 
 const steps = [
   {
-    tour: "popupTour",
+    tour: "userPopupTour",
     steps: [
       {
         icon: <>👋</>,
@@ -50,7 +50,7 @@ const steps = [
             Scrollr.
           </>
         ),
-        selector: "#popup-tabs",
+        selector: "#popup-tabs-powerbutton",
         side: "top-right",
         showControls: true,
         showSkip: true,

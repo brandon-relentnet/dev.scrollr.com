@@ -49,8 +49,10 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <Link href="/" className="btn btn-ghost text-xl mr-2">
-            myScrollr.com
+          <Link href="/" className="btn btn-ghost text-2xl mr-2">
+            <h1 className="font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Scrollr
+            </h1>
           </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
@@ -72,7 +74,7 @@ export default function Navbar() {
               </details>
             </li>
             <li>
-              <a>Item 3</a>
+              <Link href="/docs">Docs</Link>
             </li>
           </ul>
         </div>

@@ -374,6 +374,11 @@ export const THEMES = [
     value: "caramellatte",
     colors: ["#f7f3f0", "#d2691e", "#8b4513"],
   },
+  {
+    label: "Jayhawks",
+    value: "jayhawks",
+    colors: ["#0051BA", "#e8000d", "#ffc82d"],
+  },
   { label: "Abyss", value: "abyss", colors: ["#000000", "#4c1d95", "#7c3aed"] },
   { label: "Silk", value: "silk", colors: ["#f8f9fa", "#6c757d", "#495057"] },
 ];

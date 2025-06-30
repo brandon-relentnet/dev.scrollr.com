@@ -12,7 +12,7 @@ export default function TutorialPage() {
     isNextStepVisible,
   } = useNextStep();
   const handleStartTour = () => {
-    startNextStep("popupTour");
+    startNextStep("userPopupTour");
   };
   return (
     <div className="flex flex-col justify-center items-center gap-10 min-h-[calc(100vh-4rem)]">

@@ -59,6 +59,7 @@ export default function PowerTab() {
       <div className="tab-content bg-base-100 border-base-300 p-6">
         <div className="flex flex-col items-center justify-center">
           <label
+            id="popup-tabs-powerbutton"
             className={`swap swap-rotate btn btn-ghost btn-circle p-6 size-50 transition-colors duration-150 ${
               !power
                 ? "text-base-content/30 hover:text-base-content/70"
