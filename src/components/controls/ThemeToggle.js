@@ -1,3 +1,5 @@
+"use client";
+
 import { THEMES } from "@/data/dataProvider";
 import { useTheme } from "next-themes";
 import { useDispatch } from "react-redux";
