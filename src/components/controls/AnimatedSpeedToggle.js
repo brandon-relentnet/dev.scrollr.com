@@ -5,6 +5,7 @@ const AnimatedSpeedToggle = ({
   speed,
   className = "",
   onSpeedToggle,
+  showLabel = true,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [prevSpeed, setPrevSpeed] = useState(speed);
@@ -45,54 +46,64 @@ const AnimatedSpeedToggle = ({
   };
 
   return (
-    <li>
-      <button
-        onClick={handleClick}
-        className={`card relative cursor-pointer bg-base-300 hover:scale-115 active:scale-95 transition-transform duration-150 ${className}`}
-        data-tip={`Speed: ${speed.charAt(0).toUpperCase() + speed.slice(1)}`}
+    <label className="cursor-pointer">
+      <div
+        className={`flex items-center gap-2 hover:scale-115 active:scale-95 transition-all duration-150 ${className}`}
+        data-tip={`Layout: ${speed.charAt(0).toUpperCase() + speed.slice(1)}`}
       >
-        <div className="relative group size-14">
-          {/* Slow Speed - Turtle */}
-          <div
-            className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
-              "slow"
-            )}`}
-          >
-            <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
-              <span className="label-text">
-                <TurtleIcon />
-              </span>
-            </label>
-          </div>
+        {showLabel && (
+          <span className="label-text-alt text-lg italic">
+            {speed.charAt(0).toUpperCase() + speed.slice(1)}
+          </span>
+        )}
 
-          {/* Classic Speed - Walking */}
-          <div
-            className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
-              "classic"
-            )}`}
-          >
-            <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
-              <span className="label-text">
-                <WalkingIcon className="size-10" />
-              </span>
-            </label>
-          </div>
+        <button
+          onClick={handleClick}
+          className={`card relative cursor-pointer bg-base-300`}
+        >
+          <div className="relative group size-14">
+            {/* Slow Speed - Turtle */}
+            <div
+              className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
+                "slow"
+              )}`}
+            >
+              <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
+                <span className="label-text">
+                  <TurtleIcon />
+                </span>
+              </label>
+            </div>
 
-          {/* Fast Speed - Running */}
-          <div
-            className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
-              "fast"
-            )}`}
-          >
-            <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
-              <span className="label-text">
-                <RunningIcon />
-              </span>
-            </label>
+            {/* Classic Speed - Walking */}
+            <div
+              className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
+                "classic"
+              )}`}
+            >
+              <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
+                <span className="label-text">
+                  <WalkingIcon className="size-10" />
+                </span>
+              </label>
+            </div>
+
+            {/* Fast Speed - Running */}
+            <div
+              className={`absolute inset-0 transition-all duration-150 ease-out ${getIconPosition(
+                "fast"
+              )}`}
+            >
+              <label className="cursor-pointer flex items-center justify-center h-full text-primary transition-transform duration-150">
+                <span className="label-text">
+                  <RunningIcon />
+                </span>
+              </label>
+            </div>
           </div>
-        </div>
-      </button>
-    </li>
+        </button>
+      </div>
+    </label>
   );
 };
 

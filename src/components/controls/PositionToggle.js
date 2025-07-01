@@ -1,9 +1,9 @@
 import { ArrowDownIcon } from "@heroicons/react/24/solid";
+import { useSettingsUpdate } from "@/components/hooks/useSettingsUpdate";
+import { useSelector } from "react-redux";
+import { togglePosition } from "@/store/layoutSlice";
 
 export default function PositionToggle({
-  position,
-  layout,
-  onChange,
   className = "",
   showLabel = true,
   size = "md",
@@ -13,16 +13,25 @@ export default function PositionToggle({
     md: "size-12",
     lg: "size-14",
   };
+  const { updateSetting } = useSettingsUpdate();
+  const position = useSelector((state) => state.layout?.position || "top");
+  const layout = useSelector((state) => state.layout?.mode || "compact");
 
-  const handleChange = (e) => {
-    onChange(e.target.checked ? "bottom" : "top");
+  const handlePositionChange = (newPosition) => {
+    if (position !== newPosition) {
+      updateSetting(togglePosition(), "POSITION_CHANGED", {
+        position: newPosition,
+      });
+    }
   };
 
   return (
     <label className="swap">
       <input
         type="checkbox"
-        onChange={handleChange}
+        onChange={(e) =>
+          handlePositionChange(e.target.checked ? "bottom" : "top")
+        }
         checked={position === "bottom"}
       />
       <div

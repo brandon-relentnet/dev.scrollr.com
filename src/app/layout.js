@@ -5,7 +5,6 @@ import { ThemeProvider } from "next-themes";
 import { NextStepProvider, NextStep } from "nextstepjs";
 import ClientOnly from "../components/ClientOnly";
 import ReduxProvider from "@/components/ReduxProvider";
-import GlobalOverlay from "@/components/GlobalOverlay";
 import TutorialCard from "@/components/TutorialCard";
 
 const geistSans = Geist({
@@ -90,7 +89,6 @@ export default function RootLayout({ children }) {
                 <NextStep steps={steps} cardComponent={TutorialCard}>
                   <Navbar />
                   {children}
-                  <GlobalOverlay />
                 </NextStep>
               </NextStepProvider>
             </ReduxProvider>

@@ -2,11 +2,11 @@ import {
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
 } from "@heroicons/react/24/solid";
+import { useSettingsUpdate } from "@/components/hooks/useSettingsUpdate";
+import { useSelector } from "react-redux";
+import { setLayout } from "@/store/layoutSlice";
 
 export default function LayoutToggle({
-  layout,
-  position,
-  onChange,
   className = "",
   showLabel = true,
   size = "md",
@@ -16,12 +16,23 @@ export default function LayoutToggle({
     md: "size-12",
     lg: "size-14",
   };
+  const { updateSetting } = useSettingsUpdate();
+  const layout = useSelector((state) => state.layout?.mode || "compact");
+  const position = useSelector((state) => state.layout?.position || "top");
+
+  const handleLayoutChange = (newLayout) => {
+    updateSetting(setLayout(newLayout), "LAYOUT_CHANGED", {
+      layout: newLayout,
+    });
+  };
 
   return (
     <label className="swap">
       <input
         type="checkbox"
-        onChange={(e) => onChange(e.target.checked ? "compact" : "comfort")}
+        onChange={(e) =>
+          handleLayoutChange(e.target.checked ? "compact" : "comfort")
+        }
         checked={layout === "compact"}
       />
       <div

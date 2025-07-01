@@ -1,12 +1,22 @@
+"use client";
+
+import { useDevMode } from "@/hooks/useDevMode";
+import UserDocs from "./user/page";
+
 export default function DocsPage() {
-  return (
-    <div className="flex flex-col justify-center items-center gap-10 min-h-[calc(100vh-4rem)]">
-      <h1 className="text-3xl font-bold">Documentation</h1>
-      <p className="text-lg">
-        This is the documentation page. Here you can find guides and API
-        references.
-      </p>
-      <p className="text-sm text-gray-500">(This page is under construction)</p>
-    </div>
-  );
+  const { devMode } = useDevMode();
+  
+  // For now, just show user docs. Dev docs can be added later
+  if (devMode) {
+    return (
+      <div className="min-h-screen bg-base-100 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold mb-4">Developer Documentation</h1>
+          <p className="text-lg text-base-content/70">Coming soon...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  return <UserDocs />;
 }

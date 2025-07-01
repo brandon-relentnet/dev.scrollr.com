@@ -91,6 +91,7 @@ export default function PowerTab() {
                 speed={speed}
                 onSpeedToggle={handleSpeedToggle}
                 className="tooltip"
+                showLabel={false}
               />
               <li>
                 <LayoutToggle
