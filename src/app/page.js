@@ -24,6 +24,7 @@ import {
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import SvgIllustration from "@/components/ScrollrSVG";
+import DraggableLogo from "@/components/DraggableLogo";
 
 export default function Home() {
   const { devMode } = useDevMode();
@@ -150,13 +151,7 @@ export default function Home() {
             </div>
             <div className="relative w-full h-[60vh] flex items-center justify-center">
               <div className="max-w-4xl">
-                <div className="flex justify-center mb-6">
-                  <SvgIllustration
-                    width={100}
-                    height={100}
-                    className={devMode ? "animate-spin-slow" : "animate-bounce"}
-                  />
-                </div>
+                <DraggableLogo />
                 <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                   {heroContent.title}
                 </h1>
