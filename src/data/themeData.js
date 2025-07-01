@@ -130,6 +130,11 @@ export const THEMES = [
     value: "jayhawks",
     colors: ["#0051BA", "#e8000d", "#ffc82d"],
   },
-  { label: "Abyss", value: "abyss", colors: ["#000000", "#4c1d95", "#7c3aed"] },
-  { label: "Silk", value: "silk", colors: ["#f8f9fa", "#6c757d", "#495057"] },
+  { label: "Abyss", value: "abyss", colors: ["#001c23", "#beff00", "#505050"] },
+  { label: "Silk", value: "silk", colors: ["#f7f5f3", "#1c1c29", "#1c1c29"] },
+  {
+    label: "Twilight Bloom",
+    value: "twilightbloom",
+    colors: ["#9b4f96", "#d60270", "#0038a8"],
+  },
 ];
