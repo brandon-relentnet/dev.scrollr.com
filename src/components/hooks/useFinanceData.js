@@ -6,6 +6,7 @@ import { STOCK_PRESETS, CRYPTO_PRESETS } from "@/data/dataProvider";
 import { createWebSocketConnection } from "./connectionUtils";
 import { SERVICE_CONFIG } from "@/config/endpoints.js";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";
+import { loadFinanceMockData, useMockData } from "@/utils/mockDataLoader.js";
 
 // OPTIMIZATION: Debounce utility
 function useDebounce(value, delay) {
@@ -256,6 +257,18 @@ export default function useFinanceData() {
         count: 0,
         message: "No filters selected",
         timestamp: Date.now(),
+      });
+      return;
+    }
+
+    // Use mock data if enabled
+    if (useMockData) {
+      setConnectionStatus("Using Mock Data");
+      const mockData = loadFinanceMockData();
+      setTradesData(mockData);
+      debugLogger.websocketEvent("Loaded finance mock data", {
+        count: mockData.data?.length || 0,
+        dataPreview: mockData.data?.slice(0, 2),
       });
       return;
     }

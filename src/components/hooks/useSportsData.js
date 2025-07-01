@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { createWebSocketConnection } from "./connectionUtils";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";
+import { loadSportsMockData, useMockData } from "@/utils/mockDataLoader.js";
 
 // Custom hook to handle sports data and WebSocket connection
 export default function useSportsData() {
@@ -109,6 +110,18 @@ export default function useSportsData() {
         wsRef.current.close(1000, "No sports filters");
         wsRef.current = null;
       }
+      return;
+    }
+
+    // Use mock data if enabled
+    if (useMockData) {
+      setConnectionStatus("Using Mock Data");
+      const mockData = loadSportsMockData();
+      setSportsData(mockData.data || []);
+      debugLogger.websocketEvent("Loaded sports mock data", {
+        count: mockData.data?.length || 0,
+        dataPreview: mockData.data?.slice(0, 2),
+      });
       return;
     }
 

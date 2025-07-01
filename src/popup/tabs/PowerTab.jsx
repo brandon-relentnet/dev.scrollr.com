@@ -54,28 +54,19 @@ export default function PowerTab() {
           aria-label="Tab 3"
           defaultChecked
         />
-        <PowerIcon className="size-8" />
+        <BoltIcon className="size-8" />
       </label>
       <div className="tab-content bg-base-100 border-base-300 p-6">
         <div className="flex flex-col items-center justify-center">
-          <label
+          <button
             id="popup-tabs-powerbutton"
-            className={`swap swap-rotate btn btn-ghost btn-circle p-6 size-50 transition-colors duration-150 ${
-              !power
-                ? "text-base-content/30 hover:text-base-content/70"
-                : "text-primary"
+            className={`btn btn-ghost btn-circle p-6 size-50 transition-colors duration-150 ${
+              power ? "text-primary" : "text-primary/30"
             }`}
+            onClick={handlePowerToggle}
           >
-            {isMounted && (
-              <input
-                type="checkbox"
-                onChange={handlePowerToggle}
-                checked={!power}
-              />
-            )}
-            <BoltSlashIcon className="swap-on size-full transition-colors duration-150" />
-            <BoltIcon className="swap-off size-full transition-colors duration-150" />
-          </label>
+            <PowerIcon className="size-full transition-colors duration-150" />
+          </button>
           {isMounted && (
             <ul className="flex items-center justify-center shadow-sm hover:shadow-md transition duration-150 gap-6 px-5 p-3 bg-base-200 rounded-box mt-6">
               <li>
