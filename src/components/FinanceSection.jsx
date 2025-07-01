@@ -6,7 +6,7 @@ import {
   CRYPTO_PRESETS,
   STOCK_OPTIONS,
   CRYPTO_OPTIONS,
-} from "@/popup/tabs/data";
+} from "@/data/dataProvider";
 import {
   toggleFinanceCategory,
   setFinancePreset,

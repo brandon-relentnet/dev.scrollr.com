@@ -48,7 +48,14 @@ const SpeedToggle = ({ className = "", showLabel = true }) => {
   };
 
   return (
-    <label className="cursor-pointer">
+    <label className="label text-base-content font-semibold text-lg flex justify-between items-center cursor-pointer">
+      {showLabel && (
+        <>
+          <span className="label-text">Speed</span>
+          <span className="bg-base-300 card h-1 flex-1 mx-2" />
+        </>
+      )}
+
       <div
         className={`flex items-center gap-2 hover:scale-115 active:scale-95 transition-all duration-150 ${className}`}
         data-tip={`Layout: ${speed.charAt(0).toUpperCase() + speed.slice(1)}`}
@@ -61,7 +68,7 @@ const SpeedToggle = ({ className = "", showLabel = true }) => {
 
         <button
           onClick={handleClick}
-          className={`card overflow-hidden relative cursor-pointer bg-base-300`}
+          className={`card overflow-hidden relative bg-base-300`}
         >
           <div className="relative group size-14">
             {/* Slow Speed - Turtle */}

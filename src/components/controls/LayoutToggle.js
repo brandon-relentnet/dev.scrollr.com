@@ -29,7 +29,14 @@ export default function LayoutToggle({
   };
 
   return (
-    <label className="swap">
+    <label className="label swap text-base-content font-semibold text-lg flex justify-between items-center">
+      {showLabel && (
+        <>
+          <span className="label-text">Layout</span>
+          <span className="bg-base-300 card h-1 flex-1 ml-2" />
+        </>
+      )}
+
       <input
         type="checkbox"
         onChange={(e) =>

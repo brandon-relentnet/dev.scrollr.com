@@ -1,9 +1,9 @@
 import { SwatchIcon } from "@heroicons/react/24/solid";
-import { ThemeShowcase } from "@/app/docs/components/ThemeShowcase";
-import { THEMES } from "@/popup/tabs/data";
+import { THEMES } from "@/data/dataProvider";
 import SvgIllustration from "@/components/ScrollrSVG";
 import IframeApp from "@/iframe/App";
 
+import { ThemeShowcase } from "@/components/controls/ThemeToggle";
 import OpacitySlider from "@/components/controls/OpacitySlider";
 import PositionToggle from "@/components/controls/PositionToggle";
 import LayoutToggle from "@/components/controls/LayoutToggle";
@@ -117,11 +117,7 @@ export const DesignTab = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 pr-2 gap-4">
           {/* Position Control */}
           <div className="bg-base-200 p-4 card">
-            <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-              <span className="label-text">Position</span>
-              <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-              <PositionToggle size="sm" />
-            </label>
+            <PositionToggle size="sm" />
             <p className="text-sm text-base-content/70 mt-2">
               Choose whether your ticker appears at the <strong>top</strong> or{" "}
               <strong>bottom</strong> of webpages. Top positioning is great for
@@ -132,11 +128,7 @@ export const DesignTab = () => {
 
           {/* Layout Control */}
           <div className="bg-base-200 p-4 card">
-            <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-              <span className="label-text">Layout</span>
-              <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-              <LayoutToggle size="sm" />
-            </label>
+            <LayoutToggle size="sm" />
             <p className="text-sm text-base-content/70 mt-2">
               Toggle between <strong>Compact</strong> (minimal height, more
               content visible) and <strong>Comfortable</strong>
@@ -153,11 +145,7 @@ export const DesignTab = () => {
 
           {/* Speed Control */}
           <div className="bg-base-200 p-4 card">
-            <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-              <span className="label-text">Speed</span>
-              <span className="bg-base-300 card h-1 flex-1 mx-2"></span>
-              <SpeedToggle />
-            </label>
+            <SpeedToggle />
             <p className="text-sm text-base-content/70 mt-2">
               Adjust how quickly content scrolls across your ticker.{" "}
               <strong>Slow</strong> is perfect for detailed reading,

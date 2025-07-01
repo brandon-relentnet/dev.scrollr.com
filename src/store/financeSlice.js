@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { STOCK_OPTIONS, CRYPTO_OPTIONS } from "@/popup/tabs/data";
+import { STOCK_OPTIONS, CRYPTO_OPTIONS } from "@/data/dataProvider";
 
 // Helper to create default selections from options
 const createDefaultSelections = (options) =>

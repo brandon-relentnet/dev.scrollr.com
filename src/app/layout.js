@@ -3,7 +3,6 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "next-themes";
 import { NextStepProvider, NextStep } from "nextstepjs";
-import ClientOnly from "../components/ClientOnly";
 import ReduxProvider from "@/components/ReduxProvider";
 import TutorialCard from "@/components/TutorialCard";
 
@@ -83,16 +82,14 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider disableTransitionOnChange>
-          <ClientOnly>
-            <ReduxProvider>
-              <NextStepProvider>
-                <NextStep steps={steps} cardComponent={TutorialCard}>
-                  <Navbar />
-                  {children}
-                </NextStep>
-              </NextStepProvider>
-            </ReduxProvider>
-          </ClientOnly>
+          <ReduxProvider>
+            <NextStepProvider>
+              <NextStep steps={steps} cardComponent={TutorialCard}>
+                <Navbar />
+                {children}
+              </NextStep>
+            </NextStepProvider>
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,101 +1,14 @@
 import { SwatchIcon } from "@heroicons/react/24/solid";
-import { useDispatch, useSelector } from "react-redux";
-import { setReduxTheme } from "@/store/themeSlice";
-import { useTheme } from "next-themes";
-import {
-  setOpacity,
-  setLayout,
-  toggleSpeed,
-  togglePosition,
-} from "@/store/layoutSlice";
-import { useAuth } from "@/components/hooks/useAuth";
-import { useSettingsUpdate } from "@/components/hooks/useSettingsUpdate";
-import debugLogger from "@/utils/debugLogger.js";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+
 import PositionToggle from "@/components/controls/PositionToggle";
 import LayoutToggle from "@/components/controls/LayoutToggle";
 import SpeedToggle from "@/components/controls/SpeedToggle";
-import { THEMES } from "./data";
+import ThemeToggle from "@/components/controls/ThemeToggle";
+import OpacitySlider from "@/components/controls/OpacitySlider";
 
 export default function ThemeTab() {
-  const { theme, setTheme } = useTheme();
-  const dispatch = useDispatch();
-  const { updateSetting } = useSettingsUpdate();
-  const { saveSettingsImmediately } = useAuth();
-
-  const currentTheme = useSelector((state) => state.theme);
-  const opacity = useSelector((state) => state.layout?.opacity ?? 1.0);
-  const speed = useSelector((state) => state.layout?.speed || "classic");
-  const position = useSelector((state) => state.layout?.position || "top");
-  const layout = useSelector((state) => state.layout?.mode || "compact");
-
   const [currentView, setCurrentView] = useState("themes");
-  const [localOpacity, setLocalOpacity] = useState(1.0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const isSliderUpdate = useRef(false);
-
-  // Set mounted status after hydration
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Sync localOpacity with Redux opacity after hydration
-  useEffect(() => {
-    setLocalOpacity(opacity);
-  }, [opacity]);
-
-  useEffect(() => {
-    if (isSliderUpdate.current) {
-      isSliderUpdate.current = false;
-      return;
-    }
-    if (!isDragging) {
-      setLocalOpacity(opacity);
-    }
-  }, [opacity, isDragging]);
-
-  const handleOpacityChange = (event) => {
-    const newOpacity = parseFloat(event.target.value) / 100;
-    setLocalOpacity(newOpacity);
-  };
-
-  const handleOpacityEnd = (event) => {
-    const target = event.target;
-    const newOpacity = parseFloat(target.value) / 100;
-    isSliderUpdate.current = true;
-    updateSetting(setOpacity(newOpacity), "OPACITY_CHANGED", {
-      opacity: newOpacity,
-    });
-    setIsDragging(false);
-  };
-
-  const handlePositionChange = (newPosition) => {
-    if (position !== newPosition) {
-      updateSetting(togglePosition(), "POSITION_CHANGED", {
-        position: newPosition,
-      });
-    }
-  };
-
-  const handleLayoutChange = (newLayout) => {
-    updateSetting(setLayout(newLayout), "LAYOUT_CHANGED", {
-      layout: newLayout,
-    });
-  };
-
-  const getCurrentTheme = () => {
-    if (typeof currentTheme === "string") return currentTheme;
-    if (currentTheme?.mode) return currentTheme.mode;
-    return "scrollr";
-  };
-
-  const themeChange = (theme) => {
-    setTheme(theme);
-    debugLogger.uiEvent(`Theme changed to ${theme}`);
-    dispatch(setReduxTheme(theme));
-    setTimeout(() => saveSettingsImmediately(), 100);
-  };
 
   return (
     <>
@@ -133,120 +46,28 @@ export default function ThemeTab() {
 
             {/* Content based on current view */}
             <div className="overflow-hidden max-h-120">
-              {currentView === "themes" && isMounted && (
-                <div className="w-full join join-vertical overflow-y-auto h-110 pr-1">
-                  {THEMES.map(({ label, value, colors }) => (
-                    <label
-                      key={value}
-                      className="btn theme-controller join-item flex items-center justify-between"
-                      style={{
-                        backgroundColor:
-                          getCurrentTheme() === value
-                            ? "var(--color-primary)"
-                            : "",
-                        color:
-                          getCurrentTheme() === value
-                            ? "var(--color-primary-content)"
-                            : "",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="theme-buttons"
-                        value={value}
-                        className="theme-controller hidden"
-                        checked={getCurrentTheme() === value}
-                        onChange={() => themeChange(value)}
-                      />
-                      <span>{label}</span>
-                      <span className="flex gap-0.5 ml-2">
-                        {colors.map((color, i) => (
-                          <span
-                            key={i}
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
-                        ))}
-                      </span>
-                    </label>
-                  ))}
-                </div>
-              )}
+              {currentView === "themes" && <ThemeToggle />}
 
               {currentView === "preferences" && (
                 <div className="flex flex-col w-full pr-2 gap-4 overflow-y-auto h-110">
                   {/* Opacity Slider */}
                   <div className="w-full bg-base-200 p-4 card">
-                    <label className="label text-base-content font-semibold text-lg mb-3 flex justify-between items-center">
-                      <span className="label-text">Opacity</span>
-                      <span className="bg-base-300 card h-1 flex-1 mx-2"></span>
-                      {isMounted && (
-                        <span className="label-text-alt italic">
-                          {Math.round(localOpacity * 100)}%
-                        </span>
-                      )}
-                    </label>
-                    {isMounted && (
-                      <input
-                        type="range"
-                        min={0}
-                        max="100"
-                        value={Math.round(localOpacity * 100)}
-                        onChange={handleOpacityChange}
-                        onMouseDown={() => setIsDragging(true)}
-                        onTouchStart={() => setIsDragging(true)}
-                        onMouseUp={handleOpacityEnd}
-                        onTouchEnd={handleOpacityEnd}
-                        className="range range-primary"
-                      />
-                    )}
+                    <OpacitySlider />
                   </div>
 
                   {/* Position Control */}
                   <div className="w-full bg-base-200 p-4 card">
-                    <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-                      <span className="label-text">Position</span>
-                      <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-                      {isMounted && (
-                        <PositionToggle
-                          position={position}
-                          layout={layout}
-                          showLabel={true}
-                          size="sm"
-                        />
-                      )}
-                    </label>
+                    <PositionToggle size="sm" />
                   </div>
 
                   {/* Layout Control */}
                   <div className="w-full bg-base-200 p-4 card">
-                    <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-                      <span className="label-text">Layout</span>
-                      <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-                      {isMounted && (
-                        <LayoutToggle
-                          layout={layout}
-                          position={position}
-                          onChange={handleLayoutChange}
-                          showLabel={true}
-                          size="sm"
-                        />
-                      )}
-                    </label>
+                    <LayoutToggle size="sm" />
                   </div>
 
                   {/* Speed Control */}
                   <div className="w-full bg-base-200 p-4 card">
-                    <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
-                      <span className="label-text">Speed</span>
-                      <span className="bg-base-300 card h-1 flex-1 mx-2"></span>
-                      {isMounted && (
-                        <span className="label-text-alt italic">
-                          {speed.charAt(0).toUpperCase() + speed.slice(1)}
-                        </span>
-                      )}
-                    </label>
-                    {isMounted && <SpeedToggle speed={speed} />}
+                    <SpeedToggle />
                   </div>
                 </div>
               )}
