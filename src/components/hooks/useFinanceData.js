@@ -265,10 +265,29 @@ export default function useFinanceData() {
     if (useMockData) {
       setConnectionStatus("Using Mock Data");
       const mockData = loadFinanceMockData();
-      setTradesData(mockData);
-      debugLogger.websocketEvent("Loaded finance mock data", {
-        count: mockData.data?.length || 0,
-        dataPreview: mockData.data?.slice(0, 2),
+      
+      // Get the symbols we should show based on current finance filters
+      const activeSymbols = financeFilters
+        .filter(f => f.startsWith("symbol_"))
+        .map(f => f.replace("symbol_", ""));
+      
+      // Filter mock data to only show trades for active symbols
+      const filteredData = activeSymbols.length > 0
+        ? (mockData.data || []).filter(trade => activeSymbols.includes(trade.symbol))
+        : [];
+      
+      const filteredMockData = {
+        ...mockData,
+        data: filteredData,
+        count: filteredData.length,
+      };
+      
+      setTradesData(filteredMockData);
+      debugLogger.websocketEvent("Loaded and filtered finance mock data", {
+        totalCount: mockData.data?.length || 0,
+        filteredCount: filteredData.length,
+        activeSymbols: activeSymbols.slice(0, 5), // Show first 5 for debugging
+        dataPreview: filteredData.slice(0, 2),
       });
       return;
     }
@@ -435,8 +454,8 @@ export default function useFinanceData() {
         wsRef.current.close(1000, "Component unmounting");
       }
     };
-  }, [hasFinanceFilters]); // eslint-disable-line react-hooks/exhaustive-deps
-  // Note: financeFilters, sendFilterRequest, throttledSendMessage intentionally omitted to prevent infinite loops
+  }, [hasFinanceFilters, financeFilters]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: sendFilterRequest, throttledSendMessage intentionally omitted to prevent infinite loops
 
   // FIX: Add debug logging for state changes
   useEffect(() => {

@@ -117,10 +117,22 @@ export default function useSportsData() {
     if (useMockData) {
       setConnectionStatus("Using Mock Data");
       const mockData = loadSportsMockData();
-      setSportsData(mockData.data || []);
-      debugLogger.websocketEvent("Loaded sports mock data", {
-        count: mockData.data?.length || 0,
-        dataPreview: mockData.data?.slice(0, 2),
+      
+      // Filter mock data by active sports toggles
+      const activeLeagues = Object.entries(debouncedSportsToggles)
+        .filter(([key, value]) => value)
+        .map(([key]) => key);
+      
+      const filteredData = activeLeagues.length > 0 
+        ? (mockData.data || []).filter(game => activeLeagues.includes(game.league))
+        : [];
+      
+      setSportsData(filteredData);
+      debugLogger.websocketEvent("Loaded and filtered sports mock data", {
+        totalCount: mockData.data?.length || 0,
+        filteredCount: filteredData.length,
+        activeLeagues,
+        dataPreview: filteredData.slice(0, 2),
       });
       return;
     }
@@ -291,8 +303,8 @@ export default function useSportsData() {
         wsRef.current = null;
       }
     };
-  }, [hasActiveSportsToggles, throttledSendMessage]); // eslint-disable-line react-hooks/exhaustive-deps
-  // Note: debouncedSportsToggles, sendSportsFilterRequest intentionally omitted to prevent infinite loops
+  }, [hasActiveSportsToggles, debouncedSportsToggles, throttledSendMessage]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: sendSportsFilterRequest intentionally omitted to prevent infinite loops
 
   // Handle sports toggles change - removed duplicate effect
   useEffect(() => {
