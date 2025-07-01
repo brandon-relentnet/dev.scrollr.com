@@ -3,7 +3,7 @@ export const Privacy = () => (
     <div className="card bg-base-200 p-6">
       <h3 className="text-lg font-semibold mb-4">Our Privacy Promise</h3>
       <ul className="space-y-2 text-sm text-base-content/70">
-        <li>• <strong>No tracking</strong> - We don't track your browsing</li>
+        <li>• <strong>No tracking</strong> - We don&apos;t track your browsing</li>
         <li>• <strong>No analytics</strong> - No Google Analytics or similar</li>
         <li>• <strong>No accounts</strong> - No sign-ups required</li>
         <li>• <strong>Local storage</strong> - Everything stays on your device</li>
@@ -39,7 +39,7 @@ export const Privacy = () => (
           <p className="text-sm text-base-content/70">Refreshes content periodically</p>
         </div>
       </div>
-      <p className="text-sm text-base-content/70 mt-3">That's it - no other permissions!</p>
+      <p className="text-sm text-base-content/70 mt-3">That&apos;s it - no other permissions!</p>
     </div>
   </div>
 );

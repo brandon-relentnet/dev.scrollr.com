@@ -1,72 +1,15 @@
-"use client";
-
-import { useEffect, useState, useRef } from "react";
 import { SwatchIcon } from "@heroicons/react/24/solid";
-import { ThemeShowcase } from "../../components";
+import { ThemeShowcase } from "@/app/docs/components/ThemeShowcase";
 import { THEMES } from "@/popup/tabs/data";
-import PositionToggle from "@/components/controls/PositionToggle";
-import LayoutToggle from "@/components/controls/LayoutToggle";
-import AnimatedSpeedToggle from "@/components/controls/AnimatedSpeedToggle";
-import { setOpacity, toggleSpeed, togglePosition } from "@/store/layoutSlice";
-import { useSettingsUpdate } from "@/components/hooks/useSettingsUpdate";
-import { useDispatch, useSelector } from "react-redux";
 import SvgIllustration from "@/components/ScrollrSVG";
 import IframeApp from "@/iframe/App";
 
+import OpacitySlider from "@/components/controls/OpacitySlider";
+import PositionToggle from "@/components/controls/PositionToggle";
+import LayoutToggle from "@/components/controls/LayoutToggle";
+import SpeedToggle from "@/components/controls/SpeedToggle";
+
 export const DesignTab = () => {
-  const dispatch = useDispatch();
-  const { updateSetting } = useSettingsUpdate();
-
-  const opacity = useSelector((state) => state.layout?.opacity ?? 1.0);
-  const speed = useSelector((state) => state.layout?.speed || "classic");
-
-  const [localOpacity, setLocalOpacity] = useState(1.0);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  const isSliderUpdate = useRef(false);
-
-  // Set mounted status after hydration
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Sync localOpacity with Redux opacity after hydration
-  useEffect(() => {
-    setLocalOpacity(opacity);
-  }, [opacity]);
-
-  useEffect(() => {
-    if (isSliderUpdate.current) {
-      isSliderUpdate.current = false;
-      return;
-    }
-    if (!isDragging) {
-      setLocalOpacity(opacity);
-    }
-  }, [opacity, isDragging]);
-
-  const handleOpacityChange = (event) => {
-    const newOpacity = parseFloat(event.target.value) / 100;
-    setLocalOpacity(newOpacity);
-  };
-
-  const handleOpacityEnd = (event) => {
-    const target = event.target;
-    const newOpacity = parseFloat(target.value) / 100;
-    isSliderUpdate.current = true;
-    updateSetting(setOpacity(newOpacity), "OPACITY_CHANGED", {
-      opacity: newOpacity,
-    });
-    setIsDragging(false);
-  };
-
-  const handleSpeedToggle = () => {
-    dispatch(toggleSpeed());
-    const newSpeed =
-      speed === "slow" ? "classic" : speed === "classic" ? "fast" : "slow";
-    // No need for runtime messaging in web environment
-  };
-
   return (
     <div>
       <section className="mb-12">
@@ -95,13 +38,13 @@ export const DesignTab = () => {
               Choose from{" "}
               <strong>{THEMES.length} carefully crafted themes</strong> designed
               to complement any website or match your personal style. Each theme
-              includes a harmonious color palette that affects the ticker's
+              includes a harmonious color palette that affects the ticker&apos;s
               background, text, and accent colors.
             </p>
             <div className="bg-info/10 border-l-4 border-info p-4 mb-4">
               <p className="text-sm text-base-content/70">
                 <strong>💡 Pro Tip:</strong> Themes automatically adapt to your
-                website's content, ensuring optimal readability while
+                website&apos;s content, ensuring optimal readability while
                 maintaining visual appeal. Click any theme below to see the
                 change instantly!
               </p>
@@ -177,7 +120,7 @@ export const DesignTab = () => {
             <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
               <span className="label-text">Position</span>
               <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-              {isMounted && <PositionToggle showLabel={true} size="sm" />}
+              <PositionToggle size="sm" />
             </label>
             <p className="text-sm text-base-content/70 mt-2">
               Choose whether your ticker appears at the <strong>top</strong> or{" "}
@@ -192,7 +135,7 @@ export const DesignTab = () => {
             <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
               <span className="label-text">Layout</span>
               <span className="bg-base-300 card h-1 flex-1 ml-2"></span>
-              {isMounted && <LayoutToggle showLabel={true} size="sm" />}
+              <LayoutToggle size="sm" />
             </label>
             <p className="text-sm text-base-content/70 mt-2">
               Toggle between <strong>Compact</strong> (minimal height, more
@@ -205,35 +148,7 @@ export const DesignTab = () => {
 
           {/* Opacity Slider */}
           <div className="bg-base-200 p-4 card">
-            <label className="label text-base-content font-semibold text-lg mb-3 flex justify-between items-center">
-              <span className="label-text">Opacity</span>
-              <span className="bg-base-300 card h-1 flex-1 mx-2"></span>
-              {isMounted && (
-                <span className="label-text-alt italic">
-                  {Math.round(localOpacity * 100)}%
-                </span>
-              )}
-            </label>
-            {isMounted && (
-              <input
-                type="range"
-                min={0}
-                max="100"
-                value={Math.round(localOpacity * 100)}
-                onChange={handleOpacityChange}
-                onMouseDown={() => setIsDragging(true)}
-                onTouchStart={() => setIsDragging(true)}
-                onMouseUp={handleOpacityEnd}
-                onTouchEnd={handleOpacityEnd}
-                className="range range-primary w-full"
-              />
-            )}
-            <p className="text-sm text-base-content/70 mt-2">
-              Control how transparent your ticker appears over webpage content.{" "}
-              <strong>100%</strong> is fully opaque (recommended for reading),
-              while lower values create a subtle overlay effect that won't
-              interfere with the underlying page.
-            </p>
+            <OpacitySlider />
           </div>
 
           {/* Speed Control */}
@@ -241,12 +156,7 @@ export const DesignTab = () => {
             <label className="label text-base-content font-semibold text-lg mb-2 flex justify-between items-center">
               <span className="label-text">Speed</span>
               <span className="bg-base-300 card h-1 flex-1 mx-2"></span>
-              {isMounted && (
-                <AnimatedSpeedToggle
-                  speed={speed}
-                  onSpeedToggle={handleSpeedToggle}
-                />
-              )}
+              <SpeedToggle />
             </label>
             <p className="text-sm text-base-content/70 mt-2">
               Adjust how quickly content scrolls across your ticker.{" "}

@@ -49,7 +49,7 @@ export const TickerInteraction = () => (
         <li>• Hides on fullscreen videos</li>
         <li>• Reduces opacity on dark sites</li>
         <li>• Pauses during important interactions</li>
-        <li>• Resumes when you're ready</li>
+        <li>• Resumes when you&apos;re ready</li>
       </ul>
     </div>
   </div>

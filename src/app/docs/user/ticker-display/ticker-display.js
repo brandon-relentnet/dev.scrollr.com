@@ -1,6 +1,6 @@
-import { TickerOverview } from '../content/ticker-overview';
-import { TickerInteraction } from '../content/ticker-interaction';
-import { TickerCustomization } from '../content/ticker-customization';
+import { TickerOverview } from "./ticker-overview";
+import { TickerInteraction } from "./ticker-interaction";
+import { TickerCustomization } from "./ticker-customization";
 
 export const tickerDisplay = {
   "ticker-overview": {
@@ -8,23 +8,23 @@ export const tickerDisplay = {
     content: {
       title: "The Scrolling Ticker",
       description: "Understanding the main display",
-      component: TickerOverview
-    }
+      component: TickerOverview,
+    },
   },
   "ticker-interaction": {
     title: "Interacting with Ticker",
     content: {
       title: "Ticker Interactions",
       description: "How to use the ticker effectively",
-      component: TickerInteraction
-    }
+      component: TickerInteraction,
+    },
   },
   "ticker-customization": {
     title: "Visual Customization",
     content: {
       title: "Customizing Appearance",
       description: "Make the ticker fit your style",
-      component: TickerCustomization
-    }
-  }
+      component: TickerCustomization,
+    },
+  },
 };

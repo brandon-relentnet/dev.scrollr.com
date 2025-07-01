@@ -1,3 +1,5 @@
+"use client";
+
 import { useDispatch } from "react-redux";
 
 export function useSettingsUpdate() {

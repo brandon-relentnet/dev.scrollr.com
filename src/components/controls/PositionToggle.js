@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowDownIcon } from "@heroicons/react/24/solid";
 import { useSettingsUpdate } from "@/components/hooks/useSettingsUpdate";
 import { useSelector } from "react-redux";

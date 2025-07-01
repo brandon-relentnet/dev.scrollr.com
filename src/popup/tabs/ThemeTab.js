@@ -14,7 +14,7 @@ import debugLogger from "@/utils/debugLogger.js";
 import { useState, useEffect, useRef } from "react";
 import PositionToggle from "@/components/controls/PositionToggle";
 import LayoutToggle from "@/components/controls/LayoutToggle";
-import SpeedControl from "@/components/controls/SpeedControl";
+import SpeedToggle from "@/components/controls/SpeedToggle";
 import { THEMES } from "./data";
 
 export default function ThemeTab() {
@@ -68,20 +68,6 @@ export default function ThemeTab() {
       opacity: newOpacity,
     });
     setIsDragging(false);
-  };
-
-  const handleSpeedChange = (newSpeed) => {
-    let currentSpeed = speed;
-    while (currentSpeed !== newSpeed) {
-      dispatch(toggleSpeed());
-      currentSpeed =
-        currentSpeed === "slow"
-          ? "classic"
-          : currentSpeed === "classic"
-          ? "fast"
-          : "slow";
-    }
-    // No need for runtime messaging in web environment
   };
 
   const handlePositionChange = (newPosition) => {
@@ -225,7 +211,6 @@ export default function ThemeTab() {
                         <PositionToggle
                           position={position}
                           layout={layout}
-                          onChange={handlePositionChange}
                           showLabel={true}
                           size="sm"
                         />
@@ -261,12 +246,7 @@ export default function ThemeTab() {
                         </span>
                       )}
                     </label>
-                    {isMounted && (
-                      <SpeedControl
-                        speed={speed}
-                        onChange={handleSpeedChange}
-                      />
-                    )}
+                    {isMounted && <SpeedToggle speed={speed} />}
                   </div>
                 </div>
               )}

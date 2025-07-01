@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";

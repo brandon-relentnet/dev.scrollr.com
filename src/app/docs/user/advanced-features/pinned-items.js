@@ -14,7 +14,7 @@ export const PinnedItems = () => (
       <ul className="space-y-1 text-sm text-base-content/70">
         <li>• Breaking news sources</li>
         <li>• Volatile stocks</li>
-        <li>• Your team's games</li>
+        <li>• Your team&apos;s games</li>
         <li>• Important feeds</li>
         <li>• Market indices</li>
       </ul>

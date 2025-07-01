@@ -22,12 +22,12 @@ export const FAQ = () => (
       <h3 className="text-lg font-semibold mb-4">Technical Questions</h3>
       <div className="space-y-4">
         <div>
-          <h4 className="font-medium mb-2">Q: Why does it need 'all sites' permission?</h4>
+          <h4 className="font-medium mb-2">Q: Why does it need &apos;all sites&apos; permission?</h4>
           <p className="text-sm text-base-content/70">A: To display the ticker on any webpage you visit.</p>
         </div>
         <div>
           <h4 className="font-medium mb-2">Q: Is my data private?</h4>
-          <p className="text-sm text-base-content/70">A: Yes! All data is stored locally. We don't collect anything.</p>
+          <p className="text-sm text-base-content/70">A: Yes! All data is stored locally. We don&apos;t collect anything.</p>
         </div>
         <div>
           <h4 className="font-medium mb-2">Q: Does it slow down my browser?</h4>

@@ -1,3 +1,5 @@
+"use client";
+
 import { buildUrl, buildWsUrl, SERVICE_CONFIG } from "@/config/endpoints.js";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";
 

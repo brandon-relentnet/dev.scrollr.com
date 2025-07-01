@@ -1,8 +1,8 @@
-import { DesignTab } from "../content/design-tab";
-import { DisplayTab } from "../content/display-tab";
-import { PowerTab } from "../content/power-tab";
-import { AccountsTab } from "../content/accounts-tab";
-import { SettingsTab } from "../content/settings-tab";
+import { DesignTab } from "./design-tab";
+import { DisplayTab } from "./display-tab";
+import { PowerTab } from "./power-tab";
+import { AccountsTab } from "./accounts-tab";
+import { SettingsTab } from "./settings-tab";
 
 export const extensionPopup = {
   "design-tab": {

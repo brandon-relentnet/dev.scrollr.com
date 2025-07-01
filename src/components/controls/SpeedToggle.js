@@ -1,12 +1,14 @@
+"use client";
+
 import { useState } from "react";
 import { TurtleIcon, WalkingIcon, RunningIcon } from "../icons/SpeedIcons";
+import { toggleSpeed } from "@/store/layoutSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const AnimatedSpeedToggle = ({
-  speed,
-  className = "",
-  onSpeedToggle,
-  showLabel = true,
-}) => {
+const SpeedToggle = ({ className = "", showLabel = true }) => {
+  const dispatch = useDispatch();
+  const speed = useSelector((state) => state.layout?.speed || "classic");
+
   const [isAnimating, setIsAnimating] = useState(false);
   const [prevSpeed, setPrevSpeed] = useState(speed);
 
@@ -16,7 +18,7 @@ const AnimatedSpeedToggle = ({
     setPrevSpeed(speed);
 
     setTimeout(() => {
-      onSpeedToggle();
+      dispatch(toggleSpeed());
     }, 75);
 
     setTimeout(() => {
@@ -35,10 +37,10 @@ const AnimatedSpeedToggle = ({
     // During animation
     if (iconSpeed === prevSpeed) {
       // Previous icon slides out to the left
-      return "-translate-x-5 opacity-0";
+      return "-translate-x-3 opacity-0";
     } else if (iconSpeed === speed) {
       // New icon slides in from the right
-      return "translate-x-5 opacity-100";
+      return "translate-x-3 opacity-100";
     } else {
       // Other icons stay hidden on the right
       return "translate-x-full opacity-0";
@@ -59,7 +61,7 @@ const AnimatedSpeedToggle = ({
 
         <button
           onClick={handleClick}
-          className={`card relative cursor-pointer bg-base-300`}
+          className={`card overflow-hidden relative cursor-pointer bg-base-300`}
         >
           <div className="relative group size-14">
             {/* Slow Speed - Turtle */}
@@ -107,4 +109,4 @@ const AnimatedSpeedToggle = ({
   );
 };
 
-export default AnimatedSpeedToggle;
+export default SpeedToggle;

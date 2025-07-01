@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { setLayout, toggleSpeed, togglePosition } from "@/store/layoutSlice";
 import { togglePower } from "@/store/powerSlice";
-import AnimatedSpeedToggle from "@/components/controls/AnimatedSpeedToggle";
+import AnimatedSpeedToggle from "@/components/controls/SpeedToggle";
 import PositionToggle from "@/components/controls/PositionToggle";
 import LayoutToggle from "@/components/controls/LayoutToggle";
 

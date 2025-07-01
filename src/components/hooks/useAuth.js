@@ -1,11 +1,13 @@
+"use client";
+
 import { useEffect, useCallback, useMemo, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { 
-  setCredentials, 
-  updateUser, 
-  logout as logoutAction, 
-  setLoading, 
-  setError, 
+import {
+  setCredentials,
+  updateUser,
+  logout as logoutAction,
+  setLoading,
+  setError,
   setSyncStatus,
   updateSettings as updateUserSettings,
   selectAuth,
@@ -14,14 +16,14 @@ import {
   selectToken,
   selectAuthLoading,
   selectAuthError,
-  selectSyncStatus
+  selectSyncStatus,
 } from "@/slices/authSlice";
 import { API_ENDPOINTS } from "@/config/endpoints.js";
 import debugLogger, { DEBUG_CATEGORIES } from "@/utils/debugLogger.js";
 
 export function useAuth() {
   const dispatch = useDispatch();
-  
+
   // Get auth state from Redux
   const authState = useSelector(selectAuth);
   const isAuthenticated = useSelector(selectIsAuthenticated);
@@ -148,7 +150,7 @@ export function useAuth() {
     const initializeAuth = async () => {
       try {
         dispatch(setLoading(true));
-        
+
         // Redux persist has already loaded the token and user from storage
         if (token && user) {
           // Verify token is still valid by fetching current user
@@ -196,12 +198,7 @@ export function useAuth() {
 
   // Immediate save function for critical changes (like when popup closes)
   const saveSettingsImmediately = useCallback(async () => {
-    if (
-      !isInitialized ||
-      isLoadingSettings ||
-      !isAuthenticated ||
-      !token
-    ) {
+    if (!isInitialized || isLoadingSettings || !isAuthenticated || !token) {
       return;
     }
 
@@ -233,12 +230,7 @@ export function useAuth() {
   // Auto-save settings when they change (with safeguards to prevent infinite loops)
   useEffect(() => {
     // Don't auto-save during initialization, settings loading, or if not authenticated
-    if (
-      !isInitialized ||
-      isLoadingSettings ||
-      !isAuthenticated ||
-      !token
-    ) {
+    if (!isInitialized || isLoadingSettings || !isAuthenticated || !token) {
       return;
     }
 
@@ -338,7 +330,7 @@ export function useAuth() {
     async (credentials) => {
       const maxRetries = 3;
       let lastError = null;
-      
+
       dispatch(setLoading(true));
       dispatch(setError(null));
 
@@ -371,7 +363,11 @@ export function useAuth() {
               ); // exponential backoff
               continue;
             }
-            dispatch(setError(`Server temporarily unavailable (${response.status}). Please try again.`));
+            dispatch(
+              setError(
+                `Server temporarily unavailable (${response.status}). Please try again.`
+              )
+            );
             return {
               success: false,
               error: `Server temporarily unavailable (${response.status}). Please try again.`,
@@ -402,7 +398,9 @@ export function useAuth() {
               );
               continue;
             }
-            dispatch(setError("Server returned invalid response. Please try again."));
+            dispatch(
+              setError("Server returned invalid response. Please try again.")
+            );
             return {
               success: false,
               error: "Server returned invalid response. Please try again.",
@@ -444,7 +442,8 @@ export function useAuth() {
         }
       }
 
-      const errorMessage = "Network error during login. Please check your connection and try again.";
+      const errorMessage =
+        "Network error during login. Please check your connection and try again.";
       dispatch(setError(errorMessage));
       return {
         success: false,
@@ -459,7 +458,7 @@ export function useAuth() {
       try {
         dispatch(setLoading(true));
         dispatch(setError(null));
-        
+
         const response = await fetch(API_ENDPOINTS.accounts.auth.register, {
           method: "POST",
           headers: {
@@ -510,9 +509,9 @@ export function useAuth() {
       // Clear localStorage in web environment
       if (typeof window !== "undefined" && window.localStorage) {
         // Only clear non-Redux persist keys
-        const keysToKeep = ['persist:myscrollr_state'];
+        const keysToKeep = ["persist:myscrollr_state"];
         const allKeys = Object.keys(window.localStorage);
-        allKeys.forEach(key => {
+        allKeys.forEach((key) => {
           if (!keysToKeep.includes(key)) {
             window.localStorage.removeItem(key);
           }
@@ -615,12 +614,12 @@ export function useAuth() {
   // Manual settings sync function for UI use
   const syncSettings = useCallback(async () => {
     if (isAuthenticated && token) {
-      dispatch(setSyncStatus({ status: 'syncing' }));
+      dispatch(setSyncStatus({ status: "syncing" }));
       try {
         await saveSettingsToServer(token);
-        dispatch(setSyncStatus({ status: 'synced' }));
+        dispatch(setSyncStatus({ status: "synced" }));
       } catch (error) {
-        dispatch(setSyncStatus({ status: 'error' }));
+        dispatch(setSyncStatus({ status: "error" }));
         throw error;
       }
     }

@@ -1,8 +1,8 @@
-import { PinnedItems } from '../content/pinned-items';
-import { SiteControl } from '../content/site-control';
-import { Performance } from '../content/performance';
-import { FAQ } from '../content/faq';
-import { Privacy } from '../content/privacy';
+import { PinnedItems } from "./pinned-items";
+import { SiteControl } from "./site-control";
+import { Performance } from "./performance";
+import { FAQ } from "./faq";
+import { Privacy } from "./privacy";
 
 export const advancedFeatures = {
   "pinned-items": {
@@ -10,39 +10,39 @@ export const advancedFeatures = {
     content: {
       title: "Pinning Important Content",
       description: "Keep crucial information always visible",
-      component: PinnedItems
-    }
+      component: PinnedItems,
+    },
   },
   "site-control": {
     title: "Per-Site Control",
     content: {
       title: "Site-Specific Settings",
       description: "Customize Scrollr for individual websites",
-      component: SiteControl
-    }
+      component: SiteControl,
+    },
   },
-  "performance": {
+  performance: {
     title: "Performance",
     content: {
       title: "Optimizing Performance",
       description: "Keep Scrollr running smoothly",
-      component: Performance
-    }
+      component: Performance,
+    },
   },
-  "faq": {
+  faq: {
     title: "FAQ",
     content: {
       title: "Frequently Asked Questions",
       description: "Common questions answered",
-      component: FAQ
-    }
+      component: FAQ,
+    },
   },
-  "privacy": {
+  privacy: {
     title: "Privacy Policy",
     content: {
       title: "Privacy & Security",
       description: "Your data is yours alone",
-      component: Privacy
-    }
-  }
+      component: Privacy,
+    },
+  },
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { STOCK_PRESETS, CRYPTO_PRESETS } from "@/popup/tabs/data";

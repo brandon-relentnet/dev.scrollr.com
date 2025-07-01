@@ -10,11 +10,7 @@ export default function PopupContainer() {
   return (
     <>
       <label className="btn btn-ghost swap swap-rotate z-50" id="popup-toggle">
-        <input 
-          type="checkbox" 
-          checked={isOpen}
-          onChange={toggle} 
-        />
+        <input type="checkbox" checked={isOpen} onChange={toggle} />
         <SvgIllustration
           width={32}
           height={32}

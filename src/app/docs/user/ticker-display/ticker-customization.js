@@ -15,7 +15,7 @@ export const TickerCustomization = () => (
           <h4 className="font-medium mb-2">Bottom Position</h4>
           <ul className="text-sm text-base-content/70 space-y-1">
             <li>• Default and most popular</li>
-            <li>• Doesn't interfere with headers</li>
+            <li>• Doesn&apos;t interfere with headers</li>
             <li>• Easy to ignore when needed</li>
           </ul>
         </div>

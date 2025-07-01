@@ -9,9 +9,9 @@ export const QuickStart = () => (
       <h3 className="text-lg font-semibold mb-4">Step 2: Add Your First Feed</h3>
       <ol className="list-decimal list-inside space-y-2">
         <li>Go to the RSS tab</li>
-        <li>Click "Add Feed"</li>
+        <li>Click &quot;Add Feed&quot;</li>
         <li>Try this starter feed: <code className="bg-base-300 px-2 py-1 rounded">https://feeds.bbci.co.uk/news/rss.xml</code></li>
-        <li>Give it a friendly name like "BBC News"</li>
+        <li>Give it a friendly name like &quot;BBC News&quot;</li>
         <li>Click Save</li>
       </ol>
     </div>
