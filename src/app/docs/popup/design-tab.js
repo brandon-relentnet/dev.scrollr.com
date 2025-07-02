@@ -141,6 +141,12 @@ export const DesignTab = () => {
           {/* Opacity Slider */}
           <div className="bg-base-200 p-4 card">
             <OpacitySlider />
+            <p className="text-sm text-base-content/70 mt-2">
+              Control the transparency of your ticker overlay.{" "}
+              <strong>Lower opacity</strong> makes the ticker blend seamlessly
+              with website content, while <strong>higher opacity</strong>{" "}
+              ensures maximum readability and visibility.
+            </p>
           </div>
 
           {/* Speed Control */}

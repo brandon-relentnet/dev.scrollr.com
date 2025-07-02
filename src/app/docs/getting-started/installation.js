@@ -1,54 +1,122 @@
-import Image from 'next/image';
+import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 
-export const Installation = () => (
-  <div>
-    <div className="grid md:grid-cols-2 gap-6 mb-6">
-      <div className="card bg-base-200 p-6">
-        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Image src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSIjNEI5MEU1Ii8+Cjwvc3ZnPgo=" alt="Chrome" width={24} height={24} className="w-6 h-6" />
-          Chrome Installation
-        </h3>
-        <ol className="steps steps-vertical">
-          <li className="step">Visit Chrome Web Store</li>
-          <li className="step">Search for &quot;Scrollr&quot;</li>
-          <li className="step">Click &quot;Add to Chrome&quot;</li>
-          <li className="step">Confirm installation</li>
-          <li className="step">Look for icon in toolbar</li>
-        </ol>
-        <div className="mt-4">
-          <button className="btn btn-primary btn-sm">
-            Install from Chrome Store
-          </button>
+export function Installation() {
+  return (
+    <>
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <CloudArrowDownIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            Installation {">"}{" "}
+            <span className="text-base-content/70 italic">Browser Setup</span>
+          </span>
         </div>
-      </div>
 
-      <div className="card bg-base-200 p-6">
-        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-          <Image src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyUzYuNDggMjIgMTIgMjIgMjIgMTcuNTIgMjIgMTJTMTcuNTIgMiAxMiAyWiIgZmlsbD0iI0ZGNTcyMiIvPgo8L3N2Zz4K" alt="Firefox" width={24} height={24} className="w-6 h-6" />
-          Firefox Installation
-        </h3>
-        <ol className="steps steps-vertical">
-          <li className="step">Visit Firefox Add-ons</li>
-          <li className="step">Search for &quot;Scrollr&quot;</li>
-          <li className="step">Click &quot;Add to Firefox&quot;</li>
-          <li className="step">Grant permissions</li>
-          <li className="step">Find in toolbar</li>
-        </ol>
-        <div className="mt-4">
-          <button className="btn btn-secondary btn-sm">
-            Install from Firefox Store
-          </button>
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Installing Scrollr is quick and easy. Follow the step-by-step
+            instructions for your browser to get the extension up and running in
+            minutes.
+          </p>
         </div>
-      </div>
-    </div>
 
-    <div className="alert alert-info">
-      <div>
-        <h4 className="font-bold">Why does Scrollr need permissions?</h4>
-        <p className="text-sm">• <strong>All sites</strong> - To display the ticker on any webpage<br/>
-        • <strong>Storage</strong> - To save your preferences locally<br/>
-        • <strong>Alarms</strong> - To refresh content periodically</p>
-      </div>
-    </div>
-  </div>
-);
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Chrome Installation</h3>
+            <div className="prose max-w-none mb-4">
+              <p className="text-base-content/70 mb-3">
+                [Chrome Web Store Integration] - Direct link to Chrome Web Store
+                listing with install button, screenshots, reviews, and version
+                information
+              </p>
+              <div className="bg-success/10 border-l-4 border-success p-4 mb-4">
+                <p className="text-sm text-base-content/70">
+                  <strong>✅ Verified Publisher:</strong> Scrollr is published
+                  by a verified developer and regularly updated for security and
+                  compatibility.
+                </p>
+              </div>
+            </div>
+            <div className="text-sm text-base-content/70">
+              [Installation Steps] - Visual guide: Open Chrome Web Store →
+              Search &ldquo;Scrollr&rdquo; → Click &ldquo;Add to Chrome&rdquo; → Grant permissions →
+              Done!
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <CloudArrowDownIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            Installation {">"}{" "}
+            <span className="text-base-content/70 italic">Other Browsers</span>
+          </span>
+        </div>
+
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Scrollr supports multiple browsers. Choose your preferred browser
+            for detailed installation instructions.
+          </p>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Firefox Installation</h3>
+            <div className="text-sm text-base-content/70">
+              [Firefox Add-ons Store] - Installation process for Firefox users
+              with specific permission explanations and Firefox-specific
+              features
+            </div>
+          </div>
+
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Edge Installation</h3>
+            <div className="text-sm text-base-content/70">
+              [Microsoft Edge Add-ons] - Step-by-step guide for Edge browser
+              installation and Edge-specific settings optimization
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <CloudArrowDownIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            Installation {">"}{" "}
+            <span className="text-base-content/70 italic">Verification</span>
+          </span>
+        </div>
+
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Verify that Scrollr installed correctly and is ready to use.
+          </p>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Installation Check</h3>
+            <div className="text-sm text-base-content/70">
+              [Verification Tool] - Automated check to ensure extension is
+              properly installed, has correct permissions, and is communicating
+              with content scripts
+            </div>
+          </div>
+
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Troubleshooting</h3>
+            <div className="text-sm text-base-content/70">
+              [Common Issues] - Solutions for installation problems like
+              permission errors, compatibility issues, or corporate firewall
+              restrictions
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

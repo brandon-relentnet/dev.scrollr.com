@@ -1,57 +1,116 @@
-export const FAQ = () => (
-  <div className="space-y-6">
-    <div className="card bg-base-200 p-6">
-      <h3 className="text-lg font-semibold mb-4">General Questions</h3>
-      <div className="space-y-4">
-        <div>
-          <h4 className="font-medium mb-2">Q: Is Scrollr free?</h4>
-          <p className="text-sm text-base-content/70">A: Yes! Scrollr is completely free to use.</p>
-        </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Does it work on all websites?</h4>
-          <p className="text-sm text-base-content/70">A: Yes, with smart exceptions for video sites and banking.</p>
-        </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Can I sync across devices?</h4>
-          <p className="text-sm text-base-content/70">A: Cloud sync is coming soon. Currently settings are per-device.</p>
-        </div>
-      </div>
-    </div>
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
-    <div className="card bg-base-200 p-6">
-      <h3 className="text-lg font-semibold mb-4">Technical Questions</h3>
-      <div className="space-y-4">
-        <div>
-          <h4 className="font-medium mb-2">Q: Why does it need &apos;all sites&apos; permission?</h4>
-          <p className="text-sm text-base-content/70">A: To display the ticker on any webpage you visit.</p>
+export function FAQ() {
+  return (
+    <>
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <QuestionMarkCircleIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            FAQ {">"}{" "}
+            <span className="text-base-content/70 italic">
+              Common Questions
+            </span>
+          </span>
         </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Is my data private?</h4>
-          <p className="text-sm text-base-content/70">A: Yes! All data is stored locally. We don&apos;t collect anything.</p>
-        </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Does it slow down my browser?</h4>
-          <p className="text-sm text-base-content/70">A: No, Scrollr is optimized for minimal resource usage.</p>
-        </div>
-      </div>
-    </div>
 
-    <div className="card bg-base-200 p-6">
-      <h3 className="text-lg font-semibold mb-4">Troubleshooting</h3>
-      <div className="space-y-4">
-        <div>
-          <h4 className="font-medium mb-2">Q: Ticker not showing?</h4>
-          <p className="text-sm text-base-content/70">A: Check the power toggle and refresh the page.</p>
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Find answers to the most frequently asked questions about Scrollr.
+            This section covers common troubleshooting, feature explanations,
+            and helpful tips for getting the most out of your ticker experience.
+          </p>
         </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Feeds not updating?</h4>
-          <p className="text-sm text-base-content/70">A: Verify URLs are correct and site is accessible.</p>
+
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">General Usage</h3>
+            <div className="prose max-w-none mb-4">
+              <p className="text-base-content/70 mb-3">
+                [FAQ Component] - Expandable accordion with questions like: &ldquo;How
+                do I add RSS feeds?&rdquo;, &ldquo;Why isn&rsquo;t my ticker showing?&rdquo;, &ldquo;Can I
+                customize the colors?&rdquo;, etc.
+              </p>
+              <div className="bg-info/10 border-l-4 border-info p-4 mb-4">
+                <p className="text-sm text-base-content/70">
+                  <strong>💡 Quick Tip:</strong> Most issues can be resolved by
+                  checking if Scrollr is enabled and the website isn&rsquo;t on your
+                  blocked list.
+                </p>
+              </div>
+            </div>
+            <div className="text-sm text-base-content/70">
+              [Search Component] - FAQ search bar to filter questions by
+              keywords
+            </div>
+          </div>
         </div>
-        <div>
-          <h4 className="font-medium mb-2">Q: Stocks showing delays?</h4>
-          <p className="text-sm text-base-content/70">A: Free market data may have 15-minute delays.</p>
+      </section>
+
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <QuestionMarkCircleIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            FAQ {">"}{" "}
+            <span className="text-base-content/70 italic">Troubleshooting</span>
+          </span>
         </div>
-      </div>
-    </div>
-  </div>
-);
+
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Step-by-step solutions for common technical issues and compatibility
+            problems.
+          </p>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Performance Issues</h3>
+            <div className="text-sm text-base-content/70">
+              [Troubleshooting Guide] - Common performance problems and
+              solutions: &ldquo;Ticker is lagging&rdquo;, &ldquo;High CPU usage&rdquo;, &ldquo;Memory leaks&rdquo;,
+              browser compatibility issues
+            </div>
+          </div>
+
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Content Not Loading</h3>
+            <div className="text-sm text-base-content/70">
+              [Diagnostic Steps] - RSS feed validation, network connectivity
+              checks, CORS issues, invalid feed URLs, rate limiting explanations
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <div className="flex items-center gap-2 mb-6">
+          <QuestionMarkCircleIcon className="w-6 h-6 text-primary" />
+          <span className="text-lg font-semibold">
+            FAQ {">"}{" "}
+            <span className="text-base-content/70 italic">
+              Feature Requests
+            </span>
+          </span>
+        </div>
+
+        <div className="prose max-w-none mb-6">
+          <p className="text-base-content/80 text-base leading-relaxed">
+            Popular feature requests and their current status in our development
+            roadmap.
+          </p>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="bg-base-200 rounded-lg p-6">
+            <h3 className="text-lg font-semibold mb-4">Planned Features</h3>
+            <div className="text-sm text-base-content/70">
+              [Roadmap Component] - Upcoming features like mobile app, custom
+              themes, API integrations, advanced filtering options
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

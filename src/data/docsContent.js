@@ -4,29 +4,20 @@ import { DisplayTab } from "@/app/docs/popup/display-tab";
 import { PowerTab } from "@/app/docs/popup/power-tab";
 import { AccountsTab } from "@/app/docs/popup/accounts-tab";
 import { SettingsTab } from "@/app/docs/popup/settings-tab";
-
-// Placeholder components for missing pages
-const Introduction = () => <div>Introduction Content Coming Soon</div>;
-const Installation = () => <div>Installation Content Coming Soon</div>;
-const QuickStart = () => <div>Quick Start Content Coming Soon</div>;
-const FAQ = () => <div>FAQ Content Coming Soon</div>;
-const Performance = () => <div>Performance Content Coming Soon</div>;
-const PinnedItems = () => <div>Pinned Items Content Coming Soon</div>;
-const Privacy = () => <div>Privacy Content Coming Soon</div>;
-const SiteControl = () => <div>Site Control Content Coming Soon</div>;
-const TickerCustomization = () => <div>Ticker Customization Content Coming Soon</div>;
-const TickerDisplay = () => <div>Ticker Display Content Coming Soon</div>;
-const TickerInteraction = () => <div>Ticker Interaction Content Coming Soon</div>;
-const TickerOverview = () => <div>Ticker Overview Content Coming Soon</div>;
+import { TickerOverview } from "@/app/docs/scrollr/ticker-overview";
+import { Introduction } from "@/app/docs/getting-started/introduction";
+import { Installation } from "@/app/docs/getting-started/installation";
+import { QuickStart } from "@/app/docs/getting-started/quick-start";
+import { FAQ } from "@/app/docs/advanced-features/faq";
+import { Performance } from "@/app/docs/advanced-features/performance";
+import { PinnedItems } from "@/app/docs/advanced-features/pinned-items";
+import { Privacy } from "@/app/docs/advanced-features/privacy";
+import { SiteControl } from "@/app/docs/advanced-features/site-control";
+import { TickerCustomization } from "@/app/docs/scrollr/ticker-customization";
+import { TickerInteraction } from "@/app/docs/scrollr/ticker-interaction";
 
 export const docsPages = {
   // Getting Started
-  "getting-started": {
-    title: "Getting Started",
-    description: "Learn the basics of Scrollr",
-    component: Introduction,
-    breadcrumb: ["Getting Started"],
-  },
   "getting-started/introduction": {
     title: "Introduction",
     description: "Introduction to Scrollr",
@@ -47,12 +38,6 @@ export const docsPages = {
   },
 
   // Advanced Features
-  "advanced-features": {
-    title: "Advanced Features",
-    description: "Advanced Scrollr features and configuration",
-    component: FAQ,
-    breadcrumb: ["Advanced Features"],
-  },
   "advanced-features/faq": {
     title: "FAQ",
     description: "Frequently asked questions",
@@ -85,12 +70,6 @@ export const docsPages = {
   },
 
   // Popup Documentation
-  popup: {
-    title: "Extension Popup",
-    description: "Overview of the extension popup interface",
-    component: DesignTab,
-    breadcrumb: ["Popup"],
-  },
   "popup/design-tab": {
     title: "Design Tab",
     description: "Customize themes and visual appearance",
@@ -123,12 +102,6 @@ export const docsPages = {
   },
 
   // Scrollr Features
-  scrollr: {
-    title: "Scrollr Features",
-    description: "Learn about ticker functionality",
-    component: TickerOverview,
-    breadcrumb: ["Scrollr"],
-  },
   "scrollr/customize-scrollr": {
     title: "Customize your Scrollr",
     description: "Customize ticker appearance and behavior",

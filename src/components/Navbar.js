@@ -31,21 +31,10 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Item 1</a>
+                <Link href="/tutorial">Tutorial</Link>
               </li>
               <li>
-                <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <Link href="/tutorial">Tutorial</Link>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
+                <Link href="/docs/popup/design-tab">Docs</Link>
               </li>
             </ul>
           </div>
@@ -61,20 +50,7 @@ export default function Navbar() {
               <Link href="/tutorial">Tutorial</Link>
             </li>
             <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <Link href="/docs">Docs</Link>
+              <Link href="/docs/popup/design-tab">Docs</Link>
             </li>
           </ul>
         </div>
