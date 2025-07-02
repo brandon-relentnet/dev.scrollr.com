@@ -4,7 +4,8 @@ import {
   ArrowUpIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
-import { InteractiveDemo, FeatureCard } from "../components/constants";
+import { InteractiveDemo } from "../components/InteractiveDemo";
+import { FeatureCard } from "../components/FeatureCard";
 
 export const PowerTab = () => (
   <div>

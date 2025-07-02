@@ -11,7 +11,7 @@ import SpeedToggle from "@/components/controls/SpeedToggle";
 
 export const DesignTab = () => {
   return (
-    <div>
+    <>
       <section className="mb-12">
         <div className="flex items-center gap-2 mb-6">
           <SwatchIcon className="w-6 h-6 text-primary" />
@@ -156,6 +156,6 @@ export const DesignTab = () => {
           </div>
         </div>
       </section>
-    </div>
+    </>
   );
 };

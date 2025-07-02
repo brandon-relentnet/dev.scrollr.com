@@ -1,22 +1,23 @@
-import { InteractiveDemo, FeatureCard } from '../../components';
+import { InteractiveDemo } from "@/app/docs/components/InteractiveDemo";
+import { FeatureCard } from "@/app/docs/components/FeatureCard";
 import { PlayIcon, PauseIcon, WindowIcon } from "@heroicons/react/24/outline";
 
 export const TickerOverview = () => (
   <div>
     <InteractiveDemo />
-    
+
     <div className="grid md:grid-cols-3 gap-4 mb-6">
-      <FeatureCard 
+      <FeatureCard
         icon={PlayIcon}
         title="Auto-scroll"
         description="Smooth horizontal scrolling from right to left"
       />
-      <FeatureCard 
+      <FeatureCard
         icon={PauseIcon}
         title="Hover to Pause"
         description="Pauses when you move mouse over ticker"
       />
-      <FeatureCard 
+      <FeatureCard
         icon={WindowIcon}
         title="Click for Details"
         description="Click any item to open full article or details"
@@ -28,19 +29,27 @@ export const TickerOverview = () => (
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <h4 className="font-medium mb-2">📰 News Headlines</h4>
-          <p className="text-sm text-base-content/70">RSS feed articles with source and timestamp</p>
+          <p className="text-sm text-base-content/70">
+            RSS feed articles with source and timestamp
+          </p>
         </div>
         <div>
           <h4 className="font-medium mb-2">📈 Stock Quotes</h4>
-          <p className="text-sm text-base-content/70">Real-time prices with color-coded changes</p>
+          <p className="text-sm text-base-content/70">
+            Real-time prices with color-coded changes
+          </p>
         </div>
         <div>
           <h4 className="font-medium mb-2">🏆 Sports Scores</h4>
-          <p className="text-sm text-base-content/70">Live game updates with team logos</p>
+          <p className="text-sm text-base-content/70">
+            Live game updates with team logos
+          </p>
         </div>
         <div>
           <h4 className="font-medium mb-2">⭐ Pinned Items</h4>
-          <p className="text-sm text-base-content/70">Important content shown more frequently</p>
+          <p className="text-sm text-base-content/70">
+            Important content shown more frequently
+          </p>
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 import { EyeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
+import { NewsWidget } from "../components/NewsWidget";
+import { StockWidget } from "../components/StockWidget"; 
+import { SportsWidget } from "../components/SportsWidget";
 import {
-  NewsWidget,
-  StockWidget,
-  SportsWidget,
   RSS_EXAMPLES,
   STOCK_EXAMPLES,
   SPORTS_EXAMPLES,

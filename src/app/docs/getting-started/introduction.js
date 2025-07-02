@@ -1,4 +1,4 @@
-import { FeatureCard } from '../../components';
+import { FeatureCard } from "@/app/docs/components/FeatureCard";
 import { BoltIcon, EyeIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 export const Introduction = () => (
@@ -8,23 +8,25 @@ export const Introduction = () => (
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">📊</h1>
           <h2 className="text-xl font-bold">Scrollr</h2>
-          <p className="py-4">Transform any webpage into your personal information dashboard</p>
+          <p className="py-4">
+            Transform any webpage into your personal information dashboard
+          </p>
         </div>
       </div>
     </div>
 
     <div className="grid md:grid-cols-3 gap-4 mb-6">
-      <FeatureCard 
+      <FeatureCard
         icon={BoltIcon}
         title="Real-time Updates"
         description="Get live news, stocks, and sports without switching tabs"
       />
-      <FeatureCard 
+      <FeatureCard
         icon={EyeIcon}
         title="Non-intrusive"
         description="Subtle overlay that doesn't disrupt your browsing"
       />
-      <FeatureCard 
+      <FeatureCard
         icon={Cog6ToothIcon}
         title="Fully Customizable"
         description="Position, speed, content, and themes - all your choice"
